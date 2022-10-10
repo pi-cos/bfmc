@@ -1,0 +1,239 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel
+-- Using CMAKE_PREFIX_PATH: /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2022b/toolbox/ros/mlroscpp/custom_messages
+-- This workspace overlays: /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2022b/toolbox/ros/mlroscpp/custom_messages
+-- Found PythonInterp: /home/pico/.matlab/R2022b/ros1/glnxa64/venv/bin/python3 (found suitable version "3.9.5", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /home/pico/.matlab/R2022b/ros1/glnxa64/venv/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /home/pico/.matlab/R2022b/ros1/glnxa64/venv/lib/python3.9/site-packages/em.py  
+-- Using empy: /home/pico/.matlab/R2022b/ros1/glnxa64/venv/lib/python3.9/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: off
+-- catkin 0.8.10
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 1 packages in topological order:
+-- ~~  - utils
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'utils'
+-- ==> add_subdirectory(utils)
+CMake Warning at /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/genmsg-extras.cmake:49 (message):
+  Unknown message generator specified in ROS_LANG_DISABLE: geneus
+Call Stack (most recent call first):
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/genmsgConfig.cmake:222 (include)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/gencpp/cmake/gencppConfig.cmake:197 (find_package)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/message_generation/cmake/message_generationConfig.cmake:197 (find_package)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/catkin/cmake/catkinConfig.cmake:76 (find_package)
+  utils/CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/genmsg-extras.cmake:49 (message):
+  Unknown message generator specified in ROS_LANG_DISABLE: genlisp
+Call Stack (most recent call first):
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/genmsgConfig.cmake:222 (include)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/gencpp/cmake/gencppConfig.cmake:197 (find_package)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/message_generation/cmake/message_generationConfig.cmake:197 (find_package)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/catkin/cmake/catkinConfig.cmake:76 (find_package)
+  utils/CMakeLists.txt:20 (find_package)
+
+
+CMake Warning at /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/genmsg-extras.cmake:49 (message):
+  Unknown message generator specified in ROS_LANG_DISABLE: gennodejs
+Call Stack (most recent call first):
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/genmsgConfig.cmake:222 (include)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/gencpp/cmake/gencppConfig.cmake:197 (find_package)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/message_generation/cmake/message_generationConfig.cmake:197 (find_package)
+  /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/catkin/cmake/catkinConfig.cmake:76 (find_package)
+  utils/CMakeLists.txt:20 (find_package)
+
+
+-- Using these message generators: gencpp;genpy
+-- utils: 4 messages, 0 services
+-- Configuring done
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    Boost_NAMESPACE
+
+
+-- Build files have been written to: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build
+[1/19] cd /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/utils && /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/pico/.matlab/R2022b/ros1/glnxa64/venv/bin/python3 /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py utils /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/msg/vehicles.msg
+[2/19] cd /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/utils && /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/pico/.matlab/R2022b/ros1/glnxa64/venv/bin/python3 /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py utils /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/msg/localisation.msg
+[3/19] cd /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/utils && /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/pico/.matlab/R2022b/ros1/glnxa64/venv/bin/python3 /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py utils /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/msg/environmental.msg
+[4/19] cd /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/utils && /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/pico/.matlab/R2022b/ros1/glnxa64/venv/bin/python3 /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py utils /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/msg/IMU.msg
+[5/19] Generating Python from MSG utils/vehicles
+[6/19] Generating Python from MSG utils/environmental
+[7/19] Generating Python from MSG utils/IMU
+[8/19] Generating Python from MSG utils/localisation
+[9/19] Generating C++ code from utils/IMU.msg
+[10/19] Generating C++ code from utils/environmental.msg
+[11/19] Generating C++ code from utils/localisation.msg
+[12/19] Generating Python msg __init__.py for utils
+[13/19] Generating C++ code from utils/vehicles.msg
+[14/19] Building CXX object utils/CMakeFiles/utils_matlab.dir/src/utils_environmental_message.cpp.o
+In file included from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/shared_ptr.hpp:65,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/shared_ptr.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/time_clock.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time_types.hpp:46,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/time_formatters.hpp:52,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time.hpp:60,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/local_time/local_time.hpp:47,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time.hpp:51,
+                 from /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/src/utils_environmental_message.cpp:3:
+/usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/bind.hpp:72:1: note: #pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace mwboost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+   72 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[15/19] Building CXX object utils/CMakeFiles/utils_matlab.dir/src/utils_vehicles_message.cpp.o
+In file included from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/shared_ptr.hpp:65,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/shared_ptr.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/time_clock.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time_types.hpp:46,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/time_formatters.hpp:52,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time.hpp:60,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/local_time/local_time.hpp:47,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time.hpp:51,
+                 from /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/src/utils_vehicles_message.cpp:3:
+/usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/bind.hpp:72:1: note: #pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace mwboost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+   72 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[16/19] Building CXX object utils/CMakeFiles/utils_matlab.dir/src/utils_IMU_message.cpp.o
+In file included from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/shared_ptr.hpp:65,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/shared_ptr.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/time_clock.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time_types.hpp:46,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/time_formatters.hpp:52,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time.hpp:60,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/local_time/local_time.hpp:47,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time.hpp:51,
+                 from /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/src/utils_IMU_message.cpp:3:
+/usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/bind.hpp:72:1: note: #pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace mwboost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+   72 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[17/19] Building CXX object utils/CMakeFiles/utils_matlab.dir/src/utils_localisation_message.cpp.o
+In file included from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/smart_ptr/shared_ptr.hpp:65,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/shared_ptr.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/time_clock.hpp:53,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time_types.hpp:46,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/time_formatters.hpp:52,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/posix_time/posix_time.hpp:60,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time/local_time/local_time.hpp:47,
+                 from /usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/date_time.hpp:51,
+                 from /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/utils/src/utils_localisation_message.cpp:3:
+/usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/boost/include/boost/bind.hpp:72:1: note: #pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace mwboost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+   72 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[18/19] Linking CXX shared library /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/libutils_matlab.so
+[18/19] Install the project...
+-- Install configuration: "Release"
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/_setup_util.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/env.sh
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/setup.bash
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/local_setup.bash
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/setup.sh
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/local_setup.sh
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/setup.zsh
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/local_setup.zsh
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/.rosinstall
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/msg/IMU.msg
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/msg/environmental.msg
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/msg/localisation.msg
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/msg/vehicles.msg
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/cmake/utils-msg-paths.cmake
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils/localisation.h
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils/environmental.h
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils/vehicles.h
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils/IMU.h
+Listing '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils'...
+Compiling '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/__init__.py'...
+Listing '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/msg'...
+Compiling '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/msg/_IMU.py'...
+Compiling '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/msg/__init__.py'...
+Compiling '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/msg/_environmental.py'...
+Compiling '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/msg/_localisation.py'...
+Compiling '/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel/lib/python3/dist-packages/utils/msg/_vehicles.py'...
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/__init__.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/__pycache__
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/__pycache__/__init__.cpython-39.pyc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/_IMU.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__init__.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__pycache__
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__pycache__/_localisation.cpython-39.pyc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__pycache__/_vehicles.cpython-39.pyc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__pycache__/_environmental.cpython-39.pyc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__pycache__/__init__.cpython-39.pyc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/__pycache__/_IMU.cpython-39.pyc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/_localisation.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/_environmental.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/python3/dist-packages/utils/msg/_vehicles.py
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/pkgconfig/utils.pc
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/cmake/utils-msg-extras.cmake
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/cmake/utilsConfig.cmake
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/cmake/utilsConfig-version.cmake
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/share/utils/package.xml
+-- Up-to-date: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include
+-- Up-to-date: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/include/utils/visibility_control.h
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/lib/libutils_matlab.so
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m/
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+utils
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+utils/iMU.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+utils/localisation.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+utils/environmental.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+utils/vehicles.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+utils
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+utils/localisation.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+utils/environmental.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+utils/IMU.m
+-- Installing: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+utils/vehicles.m
+Base path: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64
+Source space: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src
+Build space: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build
+Devel space: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel
+Install space: /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install
+Creating symlink "/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src/CMakeLists.txt" pointing to "/usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1/share/catkin/cmake/toplevel.cmake"
+####
+#### Running command: "cmake /home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/src -DALIAS_ROS1_CLASS_LOADER=1 -DBoost_NAMESPACE=mwboost -DCATKIN_ENABLE_TESTING=off -DCMAKE_PREFIX_PATH=/usr/local/MATLAB/R2022b/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2022b/toolbox/ros/mlroscpp/custom_messages -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS_RELEASE=-O0 -DCATKIN_DEVEL_PREFIX=/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/devel -DCMAKE_INSTALL_PREFIX=/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install -G Ninja" in "/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build"
+####
+####
+#### Running command: "ninja install install -j8 -l8" in "/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/build"
+####

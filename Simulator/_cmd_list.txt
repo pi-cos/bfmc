@@ -1,0 +1,24 @@
+cd /home/pico/Documents/GitHub/bfmc/Simulator
+
+source devel/setup.bash
+
+roslaunch sim_pkg map_with_most_objects.launch
+
+rosrun example control.py
+
+
+%%% command msgs
+
+rostopic info /automobile/command 
+Type: std_msgs/String
+
+Publishers: 
+ * /manual_controller_visualizer (http://pico-office-ubuntu:36241/)
+
+Subscribers: 
+ * /gazebo (http://pico-office-ubuntu:42115/)
+
+data: "{\"action\": \"1\", \"speed\": -0.1}"
+
+data: "{\"action\": \"2\", \"steerAngle\": 15.0}"
+
