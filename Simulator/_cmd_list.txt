@@ -2,9 +2,12 @@ cd /home/pico/Documents/GitHub/bfmc/Simulator
 
 source devel/setup.bash
 
-roslaunch sim_pkg map_with_most_objects.launch
+roslaunch sim_pkg map_with_car.launch
+roslaunch sim_pkg map_with_car_nogui.launch
 
 rosrun example control.py
+
+rosservice call /gazebo/reset_simulation
 
 
 %%% command msgs
