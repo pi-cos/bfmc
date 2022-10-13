@@ -24,7 +24,7 @@ else
     error('No setting data is detected!');
 end
 
-settings.Ts_st = 0.05;
+settings.Ts_st = 0.005;
 
 Ts = settings.Ts_st;     % Closed-loop sampling time (usually = shooting interval)
 
@@ -82,16 +82,22 @@ else
 	[input] = InitData(settings);
 end  
 
-REF = [0,0,0.5,0];
-
 %% Initialize Solvers (only for advanced users)
 
 mem = InitMemory(settings, opt, input);
 
+%% load track
+
+track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st, settings.N+1);
+track.v = 1./(abs(track.k)+1);
+
+v_ref_init = 0.05;
+REF = [0,0,v_ref_init,0];
+
 %% Simulation (start your simulation...)
 
 mem.iter = 1; time = 0.0;
-Tf = 60;  % simulation time
+Tf = track.s(end-settings.N+1);  % simulation time
 state_sim= input.x0';
 controls_MPC = input.u0';
 y_sim = [];
@@ -106,9 +112,19 @@ while time(end) < Tf
         
     % the reference input.y is a ny by N matrix
     % the reference input.yN is a nyN by 1 vector    
-%     REF(1) = sin(time(end));
     input.y = repmat(REF',1,N);
     input.yN = REF(1:nyN)';
+    % curvature
+    samples = mem.iter:mem.iter+settings.N;
+    samples_mod = mod(samples,length(track.s)-settings.N+1);
+    if any(samples ~= samples_mod)
+        idx_zero = find(samples_mod==0);
+        samples_mod(idx_zero:end)=samples_mod(idx_zero:end)+1;
+        samples = samples_mod;
+    end
+    input.od(1,:) = track.k(samples);
+    % velocity
+    input.y(3,:) = track.v(samples(1:end-1));
               
     % obtain the state measurement
     input.x0 = state_sim(end,:)';

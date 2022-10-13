@@ -44,19 +44,18 @@ function [input] = InitData(settings)
             input.u0 = zeros(nu,1);
             input.u0(1) = 0.1;
             input.z0 = zeros(nz,1);
-            R = 10;
-            para0 = [1/R;0.4;0.5];
+            para0 = [0;0.2;0.25];
 
-            Q=repmat([1 1 0.5 0.1]',1,N);
+            Q=repmat([1 1 0.01 0.01]',1,N);
             QN=[1 1]';
 
             % upper and lower bounds for states (=nbx)
-            lb_x = [-0.75;-pi/2];
-            ub_x = [+0.75;+pi/2];
+            lb_x = [-0.5;-pi/2];
+            ub_x = [+0.5;+pi/2];
 
             % upper and lower bounds for controls (=nbu)
-            lb_u = [ 0;-deg2rad(25)]; %
-            ub_u = [+2;+deg2rad(25)]; %
+            lb_u = [ 0;-deg2rad(45)]; %
+            ub_u = [+2;+deg2rad(45)]; %
 
             % upper and lower bounds for general constraints (=nc)
             lb_g = [];

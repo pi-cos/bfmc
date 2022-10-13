@@ -35,7 +35,7 @@ switch settings.model
         grid on
         plot(state_sim(:,1),state_sim(:,2))
         R = 1/input.od(1);
-        plot(R*sin(time),R+R*cos(time),'k--');
+        plot(track.X,track.Y,'k--');
         axis equal
         xlabel('X [m]');
         ylabel('Y [m]');
