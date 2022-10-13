@@ -51,6 +51,7 @@ casadi_real if_else(casadi_real c, casadi_real x, casadi_real y) { return c!=0 ?
 #define casadi_from_mex CASADI_PREFIX(from_mex)
 #define casadi_s0 CASADI_PREFIX(s0)
 #define casadi_s1 CASADI_PREFIX(s1)
+#define casadi_s2 CASADI_PREFIX(s2)
 #define casadi_to_mex CASADI_PREFIX(to_mex)
 
 /* Printing routine */
@@ -75,8 +76,9 @@ casadi_real if_else(casadi_real c, casadi_real x, casadi_real y) { return c!=0 ?
   #endif
 #endif
 
-static const int casadi_s0[7] = {3, 1, 0, 3, 0, 1, 2};
-static const int casadi_s1[3] = {0, 0, 0};
+static const int casadi_s0[9] = {5, 1, 0, 5, 0, 1, 2, 3, 4};
+static const int casadi_s1[7] = {3, 1, 0, 3, 0, 1, 2};
+static const int casadi_s2[3] = {0, 0, 0};
 
 void casadi_fill(casadi_real* x, int n, casadi_real alpha) {
   int i;
@@ -174,7 +176,7 @@ mxArray* casadi_to_mex(const int* sp, const casadi_real* x) {
 
 #endif
 
-/* path_con_N_fun:(states[3],params[3])->(general_con_N[]) */
+/* path_con_N_fun:(states[5],params[3])->(general_con_N[]) */
 static int casadi_f0(const casadi_real** arg, casadi_real** res, int* iw, casadi_real* w, void* mem) {
   return 0;
 }
@@ -211,14 +213,14 @@ CASADI_SYMBOL_EXPORT const char* path_con_N_fun_name_out(int i){
 CASADI_SYMBOL_EXPORT const int* path_con_N_fun_sparsity_in(int i) {
   switch (i) {
     case 0: return casadi_s0;
-    case 1: return casadi_s0;
+    case 1: return casadi_s1;
     default: return 0;
   }
 }
 
 CASADI_SYMBOL_EXPORT const int* path_con_N_fun_sparsity_out(int i) {
   switch (i) {
-    case 0: return casadi_s1;
+    case 0: return casadi_s2;
     default: return 0;
   }
 }
@@ -237,16 +239,16 @@ void mex_path_con_N_fun(int resc, mxArray *resv[], int argc, const mxArray *argv
   if (argc>2) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_N_fun\" failed. Too many input arguments (%d, max 2)", argc);
   if (resc>1) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_N_fun\" failed. Too many output arguments (%d, max 1)", resc);
   int *iw = 0;
-  casadi_real w[9];
+  casadi_real w[13];
   const casadi_real* arg[2] = {0};
-  if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+6);
-  if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+3, casadi_s0, w+6);
+  if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+8);
+  if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+5, casadi_s1, w+8);
   casadi_real* res[1] = {0};
   --resc;
-  res[0] = w+6;
-  i = path_con_N_fun(arg, res, iw, w+6, 0);
+  res[0] = w+8;
+  i = path_con_N_fun(arg, res, iw, w+8, 0);
   if (i) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_N_fun\" failed.");
-  if (res[0]) resv[0] = casadi_to_mex(casadi_s1, res[0]);
+  if (res[0]) resv[0] = casadi_to_mex(casadi_s2, res[0]);
 }
 #endif
 

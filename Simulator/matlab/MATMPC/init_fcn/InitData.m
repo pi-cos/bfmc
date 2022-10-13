@@ -42,19 +42,21 @@ function [input] = InitData(settings)
         case 'KinematicVehicle'
             input.x0 = zeros(nx,1);
             input.u0 = zeros(nu,1);
+            input.u0(1) = 0.1;
             input.z0 = zeros(nz,1);
-            para0 = [0;0.4;0.5];
+            R = 10;
+            para0 = [1/R;0.4;0.5];
 
-            Q=repmat([1 1 0.1]',1,N);
-            QN=[1]';
+            Q=repmat([1 1 0.5 0.1]',1,N);
+            QN=[1 1]';
 
             % upper and lower bounds for states (=nbx)
-            lb_x = [];
-            ub_x = [];
+            lb_x = [-0.75;-pi/2];
+            ub_x = [+0.75;+pi/2];
 
             % upper and lower bounds for controls (=nbu)
-            lb_u = [-1;-pi/6];
-            ub_u = [+1;+pi/6];
+            lb_u = [ 0;-deg2rad(25)]; %
+            ub_u = [+2;+deg2rad(25)]; %
 
             % upper and lower bounds for general constraints (=nc)
             lb_g = [];

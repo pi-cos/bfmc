@@ -9,39 +9,59 @@ green=[0 205 102]/255;
 % start generating pictures
 switch settings.model
     
-    case 'InvertedPendulum'
-        
-        figure(1);
-        subplot(321)
-        plot(time,state_sim(:,1));
-        title('p');
-        subplot(322)
-        plot(time,state_sim(:,2)*180/pi);
-        title('\theta');
-        subplot(323)
-        plot(time,state_sim(:,3));
-        title('v');
-        subplot(324)
-        plot(time,state_sim(:,4)*180/pi);
-        title('\omega');
-        subplot(3,2,[5 6]);
-        title('F');
-        stairs(time,controls_MPC(:,1));
+%     case 'InvertedPendulum'
+%         
+%         figure(1);
+%         subplot(321)
+%         plot(time,state_sim(:,1));
+%         title('p');
+%         subplot(322)
+%         plot(time,state_sim(:,2)*180/pi);
+%         title('\theta');
+%         subplot(323)
+%         plot(time,state_sim(:,3));
+%         title('v');
+%         subplot(324)
+%         plot(time,state_sim(:,4)*180/pi);
+%         title('\omega');
+%         subplot(3,2,[5 6]);
+%         title('F');
+%         stairs(time,controls_MPC(:,1));
 
     case 'KinematicVehicle'
 
         figure(1)
+        hold on
+        grid on
         plot(state_sim(:,1),state_sim(:,2))
+        R = 1/input.od(1);
+        plot(R*sin(time),R+R*cos(time),'k--');
+        axis equal
         xlabel('X [m]');
         ylabel('Y [m]');
 
         figure(2)
         subplot(211)
         plot(time,controls_MPC(:,1))
+        grid on
         xlabel('time [s]');
+        ylabel('v [m/s]')
         subplot(212)
         plot(time,controls_MPC(:,2))
+        grid on
         xlabel('time [s]');
         ylabel('\delta_f [rad]');
+
+        figure(3)
+        subplot(211)
+        plot(time,state_sim(:,4))
+        grid on
+        xlabel('time [s]');
+        ylabel('e_y [m]')
+        subplot(212)
+        plot(time,state_sim(:,5))
+        grid on
+        xlabel('time [s]');
+        ylabel('e_\psi [rad]');
 
 end

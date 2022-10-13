@@ -24,6 +24,8 @@ else
     error('No setting data is detected!');
 end
 
+settings.Ts_st = 0.05;
+
 Ts = settings.Ts_st;     % Closed-loop sampling time (usually = shooting interval)
 
 Ts_st = settings.Ts_st;  % Shooting interval
@@ -80,7 +82,7 @@ else
 	[input] = InitData(settings);
 end  
 
-REF = [0,0.5,0];
+REF = [0,0,0.5,0];
 
 %% Initialize Solvers (only for advanced users)
 
@@ -104,7 +106,7 @@ while time(end) < Tf
         
     % the reference input.y is a ny by N matrix
     % the reference input.yN is a nyN by 1 vector    
-    REF(1) = sin(time(end));
+%     REF(1) = sin(time(end));
     input.y = repmat(REF',1,N);
     input.yN = REF(1:nyN)';
               

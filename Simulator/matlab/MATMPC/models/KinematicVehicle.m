@@ -9,19 +9,19 @@
 
 %% Dimensions
 
-nx=3;  % No. of differential states
+nx=5;  % No. of differential states
 nu=2;  % No. of controls
 nz=0;  % No. of algebraic states
-ny=3; % No. of outputs
-nyN=1; % No. of outputs at the terminal point
+ny=4; % No. of outputs
+nyN=2; % No. of outputs at the terminal point
 np=3; % No. of model parameters
 nc=0; % No. of general constraints
 ncN=0; % No. of general constraints at the terminal point
-nbx = 0; % No. of bounds on states
+nbx = 2; % No. of bounds on states
 nbu = 2; % No. of bounds on controls
 
 % state and control bounds
-nbx_idx = 0; % indexs of states which are bounded
+nbx_idx = [4,5]; % indexs of states which are bounded
 nbu_idx = [1,2]; % indexs of controls which are bounded
 
 %% create variables
@@ -48,6 +48,8 @@ l_f = params(3);
 X = states(1);
 Y = states(2);
 psi = states(3);
+e_y = states(4);
+e_psi = states(5);
 
 v = controls(1);
 d = controls(2);
@@ -61,17 +63,19 @@ dY = v*sin(psi+beta);
 dpsi = v/l_r*sin(beta);
 
 % spatial reformulation
-% s_dot = (1/(1-k*e_y))*(v*cos(e_psi));
-% e_psi_dot = dpsi-k*s_dot;
-% e_y_dot = v*sin(e_psi);
+s_dot = (1/(1-k*e_y))*(v*cos(e_psi));
+dey = v*sin(e_psi);
+depsi = dpsi-k*s_dot;
 
 
 
 % explicit ODE RHS
 x_dot=[ dX; ...
         dY; ...
-        dpsi ... 
-        ];  
+        dpsi; ... 
+        dey; ...
+        depsi ...
+        ]./s_dot;  
  
 % algebraic function
 z_fun = [];                   
@@ -83,7 +87,7 @@ impl_f = xdot - x_dot;
 %% Objectives and constraints
 
 % inner objectives
-h = [psi;v;d];
+h = [e_y;e_psi;v;d];
 hN = h(1:nyN);
 
 % outer objectives
@@ -99,4 +103,4 @@ general_con_N = [];
 
 %% NMPC discretizing time length [s]
 
-Ts_st = 0.05; % shooting interval time
+Ts_st = 0.1; % shooting interval time
