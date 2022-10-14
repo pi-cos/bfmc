@@ -91,13 +91,13 @@ mem = InitMemory(settings, opt, input);
 track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st, settings.N+1);
 track.v = 1./(abs(track.k)+1);
 
-v_ref_init = 0.05;
-REF = [0,0,v_ref_init,0];
+% v_ref_init = 0.05;
+REF = [0,0,0,0];
 
 %% Simulation (start your simulation...)
 
 mem.iter = 1; time = 0.0;
-Tf = track.s(end-settings.N+1);  % simulation time
+Tf = track.s(end-(settings.N+1));  % simulation time
 state_sim= input.x0';
 controls_MPC = input.u0';
 y_sim = [];
@@ -108,15 +108,47 @@ KKT = [];
 OBJ=[];
 numIT=[];
 
-while time(end) < Tf
+last_ref_index = -1;
+
+while time(end) < Tf % current_state.s
+
+    % find current pos wrt track
+    X = state_sim(end,1);
+    Y = state_sim(end,2);
+    PSI = state_sim(end,3);
+    search_indexes = (1:length(track.s)-(settings.N+1));
+    squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
+    [~, curr_ref_index] = min(squared_dist);
+    if last_ref_index - curr_ref_index > 0
+        disp('Lap finished, break.')
+        break
+    end
+    last_ref_index = curr_ref_index;
+%     curr_index_mod = mod(curr_ref_index,length(track.s)-(settings.N+1));
+%     if curr_ref_index ~= curr_index_mod
+%         curr_ref_index = curr_index_mod+1;
+%         break
+%     end
+
+    % compute current errors wrt track centerline
+    current_state.s = track.s(curr_ref_index);%time(end);
+    current_state.X = X;
+    current_state.Y = Y;
+    current_state.psi = PSI;
+    [e_y, e_psi] = errors_calculator(current_state, curr_ref_index, track);
+    computed_errors(mem.iter,:) = [e_y,e_psi];
+
+    % update state
+    input.x0 = [X;Y;PSI;e_y;e_psi];
+%     state_sim(end,:) = input.x0;
         
     % the reference input.y is a ny by N matrix
     % the reference input.yN is a nyN by 1 vector    
     input.y = repmat(REF',1,N);
     input.yN = REF(1:nyN)';
     % curvature
-    samples = mem.iter:mem.iter+settings.N;
-    samples_mod = mod(samples,length(track.s)-settings.N+1);
+    samples = curr_ref_index:curr_ref_index+settings.N;
+    samples_mod = mod(samples,length(track.s)-(settings.N+1));
     if any(samples ~= samples_mod)
         idx_zero = find(samples_mod==0);
         samples_mod(idx_zero:end)=samples_mod(idx_zero:end)+1;
@@ -126,8 +158,8 @@ while time(end) < Tf
     % velocity
     input.y(3,:) = track.v(samples(1:end-1));
               
-    % obtain the state measurement
-    input.x0 = state_sim(end,:)';
+%     % obtain the state measurement
+%     input.x0 = state_sim(end,:)';
     
     % call the NMPC solver 
     [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
