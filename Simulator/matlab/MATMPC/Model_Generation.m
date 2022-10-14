@@ -15,7 +15,8 @@ disp('--------------------------------------------------------------------------
 
 %% Insert Model here
 addpath([pwd,'/models']);
-addpath([userpath,'/casadi-matlabR2014b-v3.3.0']);
+% addpath([userpath,'/casadi-matlabR2014b-v3.3.0']);
+addpath([userpath,'/casadi-linux-matlabR2014b-v3.5.5']);
 
 settings.model='KinematicVehicle'; % see the folder "examples" for details
 

@@ -2,24 +2,24 @@
 %% detect OS type
 
 OS_MAC = 0;
-OS_LINUX = 0;
+OS_LINUX = 1;
 OS_WIN = 0;
 
 %% Important! 
 % Please revise the following codes using the correct 
 % path for Blasfeo and Hpipm that have been installed in your PC.
 
-if ismac
-    OS_MAC = 1;
-    PREFIX = '/Users/xxx'; % xxx is the username of your MAC OS
-elseif isunix
-    OS_LINUX = 1;
-elseif ispc
-    OS_WIN = 1;
-    PREFIX = 'D:\Tools';
-else
-    disp('Platform not supported')
-end
+% if ismac
+%     OS_MAC = 1;
+%     PREFIX = '/Users/xxx'; % xxx is the username of your MAC OS
+% elseif isunix
+%     OS_LINUX = 1;
+% elseif ispc
+%     OS_WIN = 1;
+%     PREFIX = 'D:\Tools';
+% else
+%     disp('Platform not supported')
+% end
 
 %% hpipm sparse
 

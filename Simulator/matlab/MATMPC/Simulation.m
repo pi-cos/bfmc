@@ -1,4 +1,4 @@
-restoredefaultpath; clear all; clear mex; close all;clc;
+restoredefaultpath; clear all; clear mex; close all; clc;
 
 disp( ' ' );
 disp( 'MATMPC -- A (MAT)LAB based Model(M) Predictive(P) Control(C) Package.' );
