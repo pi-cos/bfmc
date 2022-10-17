@@ -1,0 +1,29 @@
+function [track] = mpc_create_cricle(R,v,interp_step, extraNum)
+%MPC_CREATE_CRICLE Summary of this function goes here
+%   Detailed explanation goes here
+
+ss = 0:interp_step:2*pi*R;
+xx = R*sin(ss);
+yy = R+R*cos(ss);
+
+kk = 1/R*ones(length(ss),1);
+vv = v*ones(length(ss),1);
+
+ss = [ss; (ss(end):interp_step:ss(end)+extraNum*interp_step)'];
+xx = [xx; (xx(end):interp_step:xx(end)+extraNum*interp_step)'];
+yy = [yy; yy(end)*ones(extraNum+1,1)];
+vv = [vv; vv(end)*ones(extraNum+1,1)];
+kk = [kk; kk(end)*ones(extraNum,1)];
+psii = [psii; psii(end)*ones(extraNum+1,1)];
+ww = [ww; ww(end)*ones(extraNum+1,1)];
+
+track.s = ss;
+track.X = xx;
+track.Y = yy;
+track.v = vv;
+track.k = crvv;
+track.psi = psii;
+track.w = ww;
+
+end
+

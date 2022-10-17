@@ -16,7 +16,7 @@ disp('--------------------------------------------------------------------------
 
 %% Configuration (complete your configuration here...)
 addpath(genpath([pwd,'/nmpc']));
-addpath('init_fcn/')
+addpath(genpath('init_fcn/'))
 
 if exist('nmpc/data/settings.mat','file')==2
     load nmpc/data/settings.mat
@@ -88,8 +88,13 @@ mem = InitMemory(settings, opt, input);
 
 %% load track
 
-track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st, settings.N+1);
-track.v = 1./(abs(track.k)+1);
+% track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st, settings.N+1);
+% track.v = 1./(abs(track.k)+1);
+
+R = 10;
+vel = 1;
+track = mpc_create_circle(R,vel,settings.Ts_st, settings.N+1);
+
 
 % v_ref_init = 0.05;
 REF = [0,0,0,0];
