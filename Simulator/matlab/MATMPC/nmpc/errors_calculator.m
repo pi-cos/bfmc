@@ -24,14 +24,7 @@ end
 
 %% Compute e_y
 
-e_y_old = cos(psi_ref+pi)*((-current.Y)-(-traj.Y(curr_index)))-sin(psi_ref+pi)*((-current.X)-(-traj.X((curr_index))));
-
 e_y = cos(psi_ref)*(current.Y-(traj.Y(curr_index)))-sin(psi_ref)*(current.X-(traj.X(curr_index)));
-
-err = abs(e_y-e_y_old);
-if err > 1e-3
-    warning(['Check error computations, old - new difference! Error magnitude = ', num2str(err)])
-end
 
 error_angle = psi_ref + pi/2;
 pos_computed = [traj.X(curr_index); traj.Y(curr_index)] + [e_y*cos(error_angle); e_y*sin(error_angle)];

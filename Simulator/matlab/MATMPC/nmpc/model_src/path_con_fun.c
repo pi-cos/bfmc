@@ -5,10 +5,10 @@ extern "C" {
 #endif
 
 /* How to prefix internal symbols */
-#ifdef CASADI_CODEGEN_PREFIX
-  #define CASADI_NAMESPACE_CONCAT(NS, ID) _CASADI_NAMESPACE_CONCAT(NS, ID)
-  #define _CASADI_NAMESPACE_CONCAT(NS, ID) NS ## ID
-  #define CASADI_PREFIX(ID) CASADI_NAMESPACE_CONCAT(CODEGEN_PREFIX, ID)
+#ifdef CODEGEN_PREFIX
+  #define NAMESPACE_CONCAT(NS, ID) _NAMESPACE_CONCAT(NS, ID)
+  #define _NAMESPACE_CONCAT(NS, ID) NS ## ID
+  #define CASADI_PREFIX(ID) NAMESPACE_CONCAT(CODEGEN_PREFIX, ID)
 #else
   #define CASADI_PREFIX(ID) path_con_fun_ ## ID
 #endif
@@ -23,9 +23,27 @@ extern "C" {
 #define casadi_real double
 #endif
 
-#ifndef casadi_int
-#define casadi_int long long int
+#define to_double(x) (double) x
+#define to_int(x) (int) x
+#define CASADI_CAST(x,y) (x) y
+
+/* Pre-c99 compatibility */
+#if __STDC_VERSION__ < 199901L
+  #define fmin CASADI_PREFIX(fmin)
+  casadi_real fmin(casadi_real x, casadi_real y) { return x<y ? x : y;}
+  #define fmax CASADI_PREFIX(fmax)
+  casadi_real fmax(casadi_real x, casadi_real y) { return x>y ? x : y;}
 #endif
+
+/* CasADi extensions */
+#define sq CASADI_PREFIX(sq)
+casadi_real sq(casadi_real x) { return x*x;}
+#define sign CASADI_PREFIX(sign)
+casadi_real CASADI_PREFIX(sign)(casadi_real x) { return x<0 ? -1 : x>0 ? 1 : x;}
+#define twice CASADI_PREFIX(twice)
+casadi_real twice(casadi_real x) { return x+x;}
+#define if_else CASADI_PREFIX(if_else)
+casadi_real if_else(casadi_real c, casadi_real x, casadi_real y) { return c!=0 ? x : y;}
 
 /* Add prefix to internal symbols */
 #define casadi_f0 CASADI_PREFIX(f0)
@@ -36,6 +54,13 @@ extern "C" {
 #define casadi_s2 CASADI_PREFIX(s2)
 #define casadi_s3 CASADI_PREFIX(s3)
 #define casadi_to_mex CASADI_PREFIX(to_mex)
+
+/* Printing routine */
+#ifdef MATLAB_MEX_FILE
+  #define PRINTF mexPrintf
+#else
+  #define PRINTF printf
+#endif
 
 /* Symbol visibility in DLLs */
 #ifndef CASADI_SYMBOL_EXPORT
@@ -52,62 +77,58 @@ extern "C" {
   #endif
 #endif
 
-void casadi_fill(casadi_real* x, casadi_int n, casadi_real alpha) {
-  casadi_int i;
+static const int casadi_s0[9] = {5, 1, 0, 5, 0, 1, 2, 3, 4};
+static const int casadi_s1[6] = {2, 1, 0, 2, 0, 1};
+static const int casadi_s2[7] = {3, 1, 0, 3, 0, 1, 2};
+static const int casadi_s3[3] = {0, 0, 0};
+
+void casadi_fill(casadi_real* x, int n, casadi_real alpha) {
+  int i;
   if (x) {
     for (i=0; i<n; ++i) *x++ = alpha;
   }
 }
 
 #ifdef MATLAB_MEX_FILE
-casadi_real* casadi_from_mex(const mxArray* p, casadi_real* y, const casadi_int* sp, casadi_real* w) {
-  casadi_int nrow, ncol, is_sparse, c, k, p_nrow, p_ncol;
-  const casadi_int *colind, *row;
-  mwIndex *Jc, *Ir;
-  const double* p_data;
+casadi_real* casadi_from_mex(const mxArray* p, casadi_real* y, const int* sp, casadi_real* w) {
   if (!mxIsDouble(p) || mxGetNumberOfDimensions(p)!=2)
-    mexErrMsgIdAndTxt("Casadi:RuntimeError",
-      "\"from_mex\" failed: Not a two-dimensional matrix of double precision.");
-  nrow = *sp++;
-  ncol = *sp++;
-  colind = sp;
-  row = sp+ncol+1;
-  p_nrow = mxGetM(p);
-  p_ncol = mxGetN(p);
-  is_sparse = mxIsSparse(p);
-  Jc = 0;
-  Ir = 0;
+    mexErrMsgIdAndTxt("Casadi:RuntimeError","\"from_mex\" failed: Not a two-dimensional matrix of double precision.");
+  int nrow = *sp++, ncol = *sp++, nnz = sp[ncol];
+  const int *colind=sp, *row=sp+ncol+1;
+  size_t p_nrow = mxGetM(p), p_ncol = mxGetN(p);
+  int is_sparse = mxIsSparse(p);
+  mwIndex *Jc, *Ir;
   if (is_sparse) {
+#ifndef CASADI_MEX_NO_SPARSE
     Jc = mxGetJc(p);
     Ir = mxGetIr(p);
+#else /* CASADI_MEX_NO_SPARSE */
+    mexErrMsgIdAndTxt("Casadi:RuntimeError","\"from_mex\" failed: Sparse inputs disabled.");
+#endif /* CASADI_MEX_NO_SPARSE */
   }
-  p_data = (const double*)mxGetData(p);
+  const double* p_data = (const double*)mxGetData(p);
   if (p_nrow==1 && p_ncol==1) {
-    casadi_int nnz;
     double v = is_sparse && Jc[1]==0 ? 0 : *p_data;
-    nnz = sp[ncol];
     casadi_fill(y, nnz, v);
   } else {
-    casadi_int tr = 0;
+    int tr = 0;
     if (nrow!=p_nrow || ncol!=p_ncol) {
       tr = nrow==p_ncol && ncol==p_nrow && (nrow==1 || ncol==1);
-      if (!tr) mexErrMsgIdAndTxt("Casadi:RuntimeError",
-                                 "\"from_mex\" failed: Dimension mismatch. "
-                                 "Expected %d-by-%d, got %d-by-%d instead.",
-                                 nrow, ncol, p_nrow, p_ncol);
+      if (!tr) mexErrMsgIdAndTxt("Casadi:RuntimeError","\"from_mex\" failed: Dimension mismatch.");
     }
+    int r,c,k;
     if (is_sparse) {
       if (tr) {
         for (c=0; c<ncol; ++c)
           for (k=colind[c]; k<colind[c+1]; ++k) w[row[k]+c*nrow]=0;
         for (c=0; c<p_ncol; ++c)
-          for (k=Jc[c]; k<(casadi_int) Jc[c+1]; ++k) w[c+Ir[k]*p_ncol] = p_data[k];
+          for (k=Jc[c]; k<Jc[c+1]; ++k) w[c+Ir[k]*p_ncol] = p_data[k];
         for (c=0; c<ncol; ++c)
           for (k=colind[c]; k<colind[c+1]; ++k) y[k] = w[row[k]+c*nrow];
       } else {
         for (c=0; c<ncol; ++c) {
           for (k=colind[c]; k<colind[c+1]; ++k) w[row[k]]=0;
-          for (k=Jc[c]; k<(casadi_int) Jc[c+1]; ++k) w[Ir[k]]=p_data[k];
+          for (k=Jc[c]; k<Jc[c+1]; ++k) w[Ir[k]]=p_data[k];
           for (k=colind[c]; k<colind[c+1]; ++k) y[k]=w[row[k]];
         }
       }
@@ -124,44 +145,31 @@ casadi_real* casadi_from_mex(const mxArray* p, casadi_real* y, const casadi_int*
 
 #endif
 
-#define casadi_to_double(x) ((double) x)
-
 #ifdef MATLAB_MEX_FILE
-mxArray* casadi_to_mex(const casadi_int* sp, const casadi_real* x) {
-  casadi_int nrow, ncol, c, k;
+mxArray* casadi_to_mex(const int* sp, const casadi_real* x) {
+  int nrow = *sp++, ncol = *sp++, nnz = sp[ncol];
+  const int *colind = sp, *row = sp+ncol+1;
 #ifndef CASADI_MEX_NO_SPARSE
-  casadi_int nnz;
-#endif
-  const casadi_int *colind, *row;
-  mxArray *p;
-  double *d;
-#ifndef CASADI_MEX_NO_SPARSE
-  casadi_int i;
-  mwIndex *j;
-#endif /* CASADI_MEX_NO_SPARSE */
-  nrow = *sp++;
-  ncol = *sp++;
-  colind = sp;
-  row = sp+ncol+1;
-#ifndef CASADI_MEX_NO_SPARSE
-  nnz = sp[ncol];
   if (nnz!=nrow*ncol) {
-    p = mxCreateSparse(nrow, ncol, nnz, mxREAL);
+    mxArray*p = mxCreateSparse(nrow, ncol, nnz, mxREAL);
+    int i;
+    mwIndex* j;
     for (i=0, j=mxGetJc(p); i<=ncol; ++i) *j++ = *colind++;
     for (i=0, j=mxGetIr(p); i<nnz; ++i) *j++ = *row++;
     if (x) {
-      d = (double*)mxGetData(p);
-      for (i=0; i<nnz; ++i) *d++ = casadi_to_double(*x++);
+      double* d = (double*)mxGetData(p);
+      for (i=0; i<nnz; ++i) *d++ = to_double(*x++);
     }
     return p;
   }
 #endif /* CASADI_MEX_NO_SPARSE */
-  p = mxCreateDoubleMatrix(nrow, ncol, mxREAL);
+  mxArray* p = mxCreateDoubleMatrix(nrow, ncol, mxREAL);
   if (x) {
-    d = (double*)mxGetData(p);
+    double* d = (double*)mxGetData(p);
+    int c, k;
     for (c=0; c<ncol; ++c) {
       for (k=colind[c]; k<colind[c+1]; ++k) {
-        d[row[k]+c*nrow] = casadi_to_double(*x++);
+        d[row[k]+c*nrow] = to_double(*x++);
       }
     }
   }
@@ -170,36 +178,13 @@ mxArray* casadi_to_mex(const casadi_int* sp, const casadi_real* x) {
 
 #endif
 
-static const casadi_int casadi_s0[9] = {5, 1, 0, 5, 0, 1, 2, 3, 4};
-static const casadi_int casadi_s1[6] = {2, 1, 0, 2, 0, 1};
-static const casadi_int casadi_s2[7] = {3, 1, 0, 3, 0, 1, 2};
-static const casadi_int casadi_s3[3] = {0, 0, 0};
-
 /* path_con_fun:(states[5],controls[2],params[3])->(general_con[]) */
-static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
+static int casadi_f0(const casadi_real** arg, casadi_real** res, int* iw, casadi_real* w, void* mem) {
   return 0;
 }
 
-CASADI_SYMBOL_EXPORT int path_con_fun(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem){
+CASADI_SYMBOL_EXPORT int path_con_fun(const casadi_real** arg, casadi_real** res, int* iw, casadi_real* w, void* mem){
   return casadi_f0(arg, res, iw, w, mem);
-}
-
-CASADI_SYMBOL_EXPORT int path_con_fun_alloc_mem(void) {
-  return 0;
-}
-
-CASADI_SYMBOL_EXPORT int path_con_fun_init_mem(int mem) {
-  return 0;
-}
-
-CASADI_SYMBOL_EXPORT void path_con_fun_free_mem(int mem) {
-}
-
-CASADI_SYMBOL_EXPORT int path_con_fun_checkout(void) {
-  return 0;
-}
-
-CASADI_SYMBOL_EXPORT void path_con_fun_release(int mem) {
 }
 
 CASADI_SYMBOL_EXPORT void path_con_fun_incref(void) {
@@ -208,17 +193,11 @@ CASADI_SYMBOL_EXPORT void path_con_fun_incref(void) {
 CASADI_SYMBOL_EXPORT void path_con_fun_decref(void) {
 }
 
-CASADI_SYMBOL_EXPORT casadi_int path_con_fun_n_in(void) { return 3;}
+CASADI_SYMBOL_EXPORT int path_con_fun_n_in(void) { return 3;}
 
-CASADI_SYMBOL_EXPORT casadi_int path_con_fun_n_out(void) { return 1;}
+CASADI_SYMBOL_EXPORT int path_con_fun_n_out(void) { return 1;}
 
-CASADI_SYMBOL_EXPORT casadi_real path_con_fun_default_in(casadi_int i){
-  switch (i) {
-    default: return 0;
-  }
-}
-
-CASADI_SYMBOL_EXPORT const char* path_con_fun_name_in(casadi_int i){
+CASADI_SYMBOL_EXPORT const char* path_con_fun_name_in(int i){
   switch (i) {
     case 0: return "states";
     case 1: return "controls";
@@ -227,14 +206,14 @@ CASADI_SYMBOL_EXPORT const char* path_con_fun_name_in(casadi_int i){
   }
 }
 
-CASADI_SYMBOL_EXPORT const char* path_con_fun_name_out(casadi_int i){
+CASADI_SYMBOL_EXPORT const char* path_con_fun_name_out(int i){
   switch (i) {
     case 0: return "general_con";
     default: return 0;
   }
 }
 
-CASADI_SYMBOL_EXPORT const casadi_int* path_con_fun_sparsity_in(casadi_int i) {
+CASADI_SYMBOL_EXPORT const int* path_con_fun_sparsity_in(int i) {
   switch (i) {
     case 0: return casadi_s0;
     case 1: return casadi_s1;
@@ -243,14 +222,14 @@ CASADI_SYMBOL_EXPORT const casadi_int* path_con_fun_sparsity_in(casadi_int i) {
   }
 }
 
-CASADI_SYMBOL_EXPORT const casadi_int* path_con_fun_sparsity_out(casadi_int i) {
+CASADI_SYMBOL_EXPORT const int* path_con_fun_sparsity_out(int i) {
   switch (i) {
     case 0: return casadi_s3;
     default: return 0;
   }
 }
 
-CASADI_SYMBOL_EXPORT int path_con_fun_work(casadi_int *sz_arg, casadi_int* sz_res, casadi_int *sz_iw, casadi_int *sz_w) {
+CASADI_SYMBOL_EXPORT int path_con_fun_work(int *sz_arg, int* sz_res, int *sz_iw, int *sz_w) {
   if (sz_arg) *sz_arg = 3;
   if (sz_res) *sz_res = 1;
   if (sz_iw) *sz_iw = 0;
@@ -260,16 +239,16 @@ CASADI_SYMBOL_EXPORT int path_con_fun_work(casadi_int *sz_arg, casadi_int* sz_re
 
 #ifdef MATLAB_MEX_FILE
 void mex_path_con_fun(int resc, mxArray *resv[], int argc, const mxArray *argv[]) {
-  casadi_int i;
-  casadi_real w[15];
-  casadi_int *iw = 0;
-  const casadi_real* arg[3] = {0};
-  casadi_real* res[1] = {0};
+  int i, j;
   if (argc>3) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_fun\" failed. Too many input arguments (%d, max 3)", argc);
   if (resc>1) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_fun\" failed. Too many output arguments (%d, max 1)", resc);
+  int *iw = 0;
+  casadi_real w[15];
+  const casadi_real* arg[3] = {0};
   if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+10);
   if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+5, casadi_s1, w+10);
   if (--argc>=0) arg[2] = casadi_from_mex(argv[2], w+7, casadi_s2, w+10);
+  casadi_real* res[1] = {0};
   --resc;
   res[0] = w+10;
   i = path_con_fun(arg, res, iw, w+10, 0);
@@ -282,13 +261,11 @@ void mex_path_con_fun(int resc, mxArray *resv[], int argc, const mxArray *argv[]
 #ifdef MATLAB_MEX_FILE
 void mexFunction(int resc, mxArray *resv[], int argc, const mxArray *argv[]) {
   char buf[13];
-  int buf_ok = argc > 0 && !mxGetString(*argv, buf, sizeof(buf));
+  int buf_ok = --argc >= 0 && !mxGetString(*argv++, buf, sizeof(buf));
   if (!buf_ok) {
-    mex_path_con_fun(resc, resv, argc, argv);
-    return;
+    /* name error */
   } else if (strcmp(buf, "path_con_fun")==0) {
-    mex_path_con_fun(resc, resv, argc-1, argv+1);
-    return;
+    return mex_path_con_fun(resc, resv, argc, argv);
   }
   mexErrMsgTxt("First input should be a command string. Possible values: 'path_con_fun'");
 }

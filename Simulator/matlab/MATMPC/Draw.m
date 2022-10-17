@@ -57,7 +57,7 @@ switch settings.model
         hold on
         grid on
         plot(time,state_sim(:,4))
-        plot(time(1:length(computed_errors(:,1))),computed_errors(:,1))
+        plot(time,computed_errors(:,1))
         xlabel('time [s]');
         ylabel('e_y [m]')
         legend('state sim','computed')
@@ -65,7 +65,7 @@ switch settings.model
         hold on
         grid on
         plot(time,state_sim(:,5))
-        plot(time(1:length(computed_errors(:,1))),computed_errors(:,1))
+        plot(time,computed_errors(:,2))
         xlabel('time [s]');
         ylabel('e_\psi [rad]');
         legend('state sim','computed')

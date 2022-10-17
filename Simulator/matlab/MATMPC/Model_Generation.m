@@ -15,8 +15,8 @@ disp('--------------------------------------------------------------------------
 
 %% Insert Model here
 addpath([pwd,'/models']);
-% addpath([userpath,'/casadi-matlabR2014b-v3.3.0']);
-addpath([userpath,'/casadi-linux-matlabR2014b-v3.5.5']);
+addpath([userpath,'/casadi-matlabR2014b-v3.3.0']);
+% addpath([userpath,'/casadi-linux-matlabR2014b-v3.5.5']);
 
 settings.model='KinematicVehicle'; % see the folder "examples" for details
 
@@ -157,7 +157,8 @@ adjN_fun = Function('adjN_fun',{states,params,refN, QN, mu_x,muN_g},{dobjN, adj_
 
 %% Code generation and Compile
 
-generate=input('Would you like to generate the source code?(y/n)','s');
+% generate=input('Would you like to generate the source code?(y/n)','s');
+generate = 'y';
 
 if strcmp(generate,'y')
 
@@ -212,7 +213,8 @@ disp('    Code generation completed!');
 end
 
 disp('                           ');
-compile=input('Would you like to compile the source code?(y/n)','s');
+% compile=input('Would you like to compile the source code?(y/n)','s');
+compile = 'y';
 if strcmp(compile,'y')
     
     disp('    Compiling...');

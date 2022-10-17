@@ -16,6 +16,11 @@ disp('--------------------------------------------------------------------------
 
 %% Configuration (complete your configuration here...)
 addpath(genpath([pwd,'/nmpc']));
+
+rmpath(genpath([pwd,'/nmpc/solver/mac']));
+rmpath(genpath([pwd,'/nmpc/solver/linux']));
+% rmpath(genpath([pwd,'/nmpc/solver/windows']));
+
 addpath(genpath('init_fcn/'))
 
 if exist('nmpc/data/settings.mat','file')==2
@@ -23,8 +28,6 @@ if exist('nmpc/data/settings.mat','file')==2
 else 
     error('No setting data is detected!');
 end
-
-settings.Ts_st = 0.005;
 
 Ts = settings.Ts_st;     % Closed-loop sampling time (usually = shooting interval)
 
@@ -91,9 +94,13 @@ mem = InitMemory(settings, opt, input);
 % track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st, settings.N+1);
 % track.v = 1./(abs(track.k)+1);
 
-R = 10;
-vel = 1;
-track = mpc_create_circle(R,vel,settings.Ts_st, settings.N+1);
+R = 5;
+vel = 1.5;
+track = mpc_create_circle(R,vel,settings.Ts_st/50, settings.N+1);
+
+% path_length = 100;
+% vel = 1;
+% track = mpc_create_line(path_length,vel,settings.Ts_st, settings.N+1);
 
 
 % v_ref_init = 0.05;
@@ -102,8 +109,10 @@ REF = [0,0,0,0];
 %% Simulation (start your simulation...)
 
 mem.iter = 1; time = 0.0;
-Tf = track.s(end-(settings.N+1));  % simulation time
-state_sim= input.x0';
+% Tf = track.s(end-(settings.N+1));  % simulation time
+Tf = 10;
+state_sim = input.x0';
+computed_errors(1,:) = (input.x0(4:5))';
 controls_MPC = input.u0';
 y_sim = [];
 constraints = [];
@@ -129,11 +138,6 @@ while time(end) < Tf % current_state.s
         break
     end
     last_ref_index = curr_ref_index;
-%     curr_index_mod = mod(curr_ref_index,length(track.s)-(settings.N+1));
-%     if curr_ref_index ~= curr_index_mod
-%         curr_ref_index = curr_index_mod+1;
-%         break
-%     end
 
     % compute current errors wrt track centerline
     current_state.s = track.s(curr_ref_index);%time(end);
@@ -141,11 +145,13 @@ while time(end) < Tf % current_state.s
     current_state.Y = Y;
     current_state.psi = PSI;
     [e_y, e_psi] = errors_calculator(current_state, curr_ref_index, track);
-    computed_errors(mem.iter,:) = [e_y,e_psi];
+    computed_errors(mem.iter+1,:) = [e_y,e_psi];
 
-    % update state
+%     % update state
     input.x0 = [X;Y;PSI;e_y;e_psi];
 %     state_sim(end,:) = input.x0;
+    % obtain the state measurement
+%     input.x0 = state_sim(end,:)';
         
     % the reference input.y is a ny by N matrix
     % the reference input.yN is a nyN by 1 vector    
@@ -162,9 +168,10 @@ while time(end) < Tf % current_state.s
     input.od(1,:) = track.k(samples);
     % velocity
     input.y(3,:) = track.v(samples(1:end-1));
-              
-%     % obtain the state measurement
-%     input.x0 = state_sim(end,:)';
+
+%     input.od(1,:) = zeros(settings.N+1,1);
+%     input.y(3,:) = ones(settings.N,1);
+%     input.y(4,:) = deg2rad(5)*sin(time(end))*ones(settings.N,1);
     
     % call the NMPC solver 
     [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
@@ -232,8 +239,10 @@ while time(end) < Tf % current_state.s
     % go to the next sampling instant
     nextTime = mem.iter*Ts; 
     mem.iter = mem.iter+1;
+    if mod(mem.iter,10)==1
     disp(['current time:' num2str(nextTime) '  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num)]);
 %     disp(['current time:' num2str(nextTime) '  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num) '  Perc:' num2str(mem.perc)]);   
+    end
     time = [time nextTime];   
 end
 

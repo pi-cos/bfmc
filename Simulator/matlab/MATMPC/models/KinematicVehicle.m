@@ -75,7 +75,7 @@ x_dot=[ dX; ...
         dpsi; ... 
         dey; ...
         depsi ...
-        ]./s_dot;  
+        ];%./s_dot;  
  
 % algebraic function
 z_fun = [];                   
@@ -103,4 +103,4 @@ general_con_N = [];
 
 %% NMPC discretizing time length [s]
 
-Ts_st = 0.1; % shooting interval time
+Ts_st = 0.01; % shooting interval time
