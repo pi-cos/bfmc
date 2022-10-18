@@ -45,21 +45,21 @@ k = params(1);
 l_r = params(2);
 l_f = params(3);
 
-X = states(1); % global
-Y = states(2); % global
+X = states(1);
+Y = states(2);
 psi = states(3);
 e_y = states(4);
 e_psi = states(5);
 
-vx = controls(1); % local
+vx = controls(1);
 d = controls(2);
 
 % sideslip
 beta = atan(l_r/(l_f+l_r)*tan(d));
 
 % velocities
-v = vx/cos(beta); % local
-vy = v*sin(beta); % local
+v = vx/cos(beta+);
+vy = v*sin(beta);
 
 % eq
 dX = v*cos(psi+beta);
@@ -67,8 +67,8 @@ dY = v*sin(psi+beta);
 dpsi = v/l_r*sin(beta);
 
 % spatial reformulation
-s_dot = (1/(1-k*e_y))*(vx*cos(e_psi)-vy*sin(e_psi));
-dey = vx*sin(e_psi)+vy*cos(e_psi);
+s_dot = (1/(1-k*e_y))*(vx*cos(e_psi)+vy);
+dey = v*sin(e_psi);
 depsi = dpsi-k*s_dot;
 
 
