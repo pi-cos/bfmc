@@ -44,9 +44,11 @@ function [input] = InitData(settings)
             input.u0 = zeros(nu,1);
             input.u0(1) = 0.1;
             input.z0 = zeros(nz,1);
-            para0 = [0;0.2;0.25];
+            para0 = [0; ...
+                    0.1; ... l_r
+                    0.15]; % l_f
 
-            Q=repmat([10 1 0.01 0.01]',1,N);
+            Q=repmat([1 1 0.1 10]',1,N);
             QN=[1 1]';
 
             % upper and lower bounds for states (=nbx)

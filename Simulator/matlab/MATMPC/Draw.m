@@ -44,30 +44,30 @@ switch settings.model
         subplot(211)
         plot(time,controls_MPC(:,1))
         grid on
-        xlabel('time [s]');
+        xlabel('space [m]');
         ylabel('v [m/s]')
         subplot(212)
-        plot(time,controls_MPC(:,2))
+        plot(time,rad2deg(controls_MPC(:,2)))
         grid on
-        xlabel('time [s]');
-        ylabel('\delta_f [rad]');
+        xlabel('space [m]');
+        ylabel('\delta_f [deg]');
 
         figure(3)
         subplot(211)
         hold on
         grid on
         plot(time,state_sim(:,4))
-        plot(time,computed_errors(:,1))
-        xlabel('time [s]');
+        plot(time,computed_errors(:,1),'--')
+        xlabel('space [m]');
         ylabel('e_y [m]')
         legend('state sim','computed')
         subplot(212)
         hold on
         grid on
-        plot(time,state_sim(:,5))
-        plot(time,computed_errors(:,2))
-        xlabel('time [s]');
-        ylabel('e_\psi [rad]');
+        plot(time,rad2deg(state_sim(:,5)))
+        plot(time,rad2deg(computed_errors(:,2)),'--')
+        xlabel('space [m]');
+        ylabel('e_\psi [deg]');
         legend('state sim','computed')
 
 end

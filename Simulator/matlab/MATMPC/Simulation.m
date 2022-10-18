@@ -91,28 +91,27 @@ mem = InitMemory(settings, opt, input);
 
 %% load track
 
-% track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st, settings.N+1);
-% track.v = 1./(abs(track.k)+1);
+% ref_div = 100;
+% track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
+% track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
 
 R = 5;
 vel = 1.5;
-track = mpc_create_circle(R,vel,settings.Ts_st/50, settings.N+1);
+ref_div = 100;
+track = mpc_create_circle(R,vel,settings.Ts_st/ref_div, settings.N+1);
 
 % path_length = 100;
 % vel = 1;
 % track = mpc_create_line(path_length,vel,settings.Ts_st, settings.N+1);
 
 
-% v_ref_init = 0.05;
 REF = [0,0,0,0];
 
 %% Simulation (start your simulation...)
 
 mem.iter = 1; time = 0.0;
-% Tf = track.s(end-(settings.N+1));  % simulation time
-Tf = 10;
+Tf = track.s(end-(settings.N+1));  % simulation space
 state_sim = input.x0';
-computed_errors(1,:) = (input.x0(4:5))';
 controls_MPC = input.u0';
 y_sim = [];
 constraints = [];
@@ -145,7 +144,7 @@ while time(end) < Tf % current_state.s
     current_state.Y = Y;
     current_state.psi = PSI;
     [e_y, e_psi] = errors_calculator(current_state, curr_ref_index, track);
-    computed_errors(mem.iter+1,:) = [e_y,e_psi];
+    computed_errors(mem.iter,:) = [e_y,e_psi];
 
 %     % update state
     input.x0 = [X;Y;PSI;e_y;e_psi];
@@ -158,7 +157,7 @@ while time(end) < Tf % current_state.s
     input.y = repmat(REF',1,N);
     input.yN = REF(1:nyN)';
     % curvature
-    samples = curr_ref_index:curr_ref_index+settings.N;
+    samples = curr_ref_index:ref_div:curr_ref_index+settings.N*ref_div;
     samples_mod = mod(samples,length(track.s)-(settings.N+1));
     if any(samples ~= samples_mod)
         idx_zero = find(samples_mod==0);
@@ -170,8 +169,8 @@ while time(end) < Tf % current_state.s
     input.y(3,:) = track.v(samples(1:end-1));
 
 %     input.od(1,:) = zeros(settings.N+1,1);
-%     input.y(3,:) = ones(settings.N,1);
-%     input.y(4,:) = deg2rad(5)*sin(time(end))*ones(settings.N,1);
+%     input.y(3,:) = 0.1*ones(settings.N,1);
+    input.y(4,:) = deg2rad(5)*sin(time(end)*3)*ones(settings.N,1);
     
     % call the NMPC solver 
     [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
@@ -240,11 +239,12 @@ while time(end) < Tf % current_state.s
     nextTime = mem.iter*Ts; 
     mem.iter = mem.iter+1;
     if mod(mem.iter,10)==1
-    disp(['current time:' num2str(nextTime) '  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num)]);
-%     disp(['current time:' num2str(nextTime) '  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num) '  Perc:' num2str(mem.perc)]);   
+    disp(['current space:' num2str(nextTime) 'm  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num)]);  
     end
     time = [time nextTime];   
 end
+
+computed_errors(mem.iter,:) = [e_y,e_psi];
 
 %%
 if strcmp(opt.qpsolver, 'qpoases')

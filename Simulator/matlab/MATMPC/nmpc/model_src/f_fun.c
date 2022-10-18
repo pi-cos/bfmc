@@ -177,7 +177,7 @@ static const casadi_int casadi_s3[4] = {0, 1, 0, 0};
 
 /* f_fun:(states[5],controls[2],params[3],alg[0])->(xdot[5]) */
 static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
-  casadi_real a0, a1, a2, a3, a4, a5;
+  casadi_real a0, a1, a10, a11, a2, a3, a4, a5, a6, a7, a8, a9;
   a0=arg[1]? arg[1][0] : 0;
   a1=arg[2]? arg[2][1] : 0;
   a2=arg[2]? arg[2][2] : 0;
@@ -193,38 +193,43 @@ static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw,
   a5=(a4+a2);
   a5=cos(a5);
   a5=(a3*a5);
+  a6=arg[0]? arg[0][4] : 0;
+  a7=cos(a6);
+  a7=(a0*a7);
+  a8=sin(a2);
+  a8=(a3*a8);
+  a9=sin(a6);
+  a9=(a8*a9);
+  a7=(a7-a9);
+  a9=1.;
+  a10=arg[2]? arg[2][0] : 0;
+  a11=arg[0]? arg[0][3] : 0;
+  a11=(a10*a11);
+  a9=(a9-a11);
+  a7=(a7/a9);
+  a5=(a5/a7);
   if (res[0]!=0) res[0][0]=a5;
   a4=(a4+a2);
   a4=sin(a4);
   a4=(a3*a4);
+  a4=(a4/a7);
   if (res[0]!=0) res[0][1]=a4;
-  a1=(a3/a1);
-  a4=sin(a2);
-  a1=(a1*a4);
-  if (res[0]!=0) res[0][2]=a1;
-  a4=arg[0]? arg[0][4] : 0;
-  a5=sin(a4);
-  a5=(a0*a5);
+  a3=(a3/a1);
   a2=sin(a2);
   a3=(a3*a2);
-  a2=cos(a4);
-  a2=(a3*a2);
-  a5=(a5+a2);
-  if (res[0]!=0) res[0][3]=a5;
-  a5=arg[2]? arg[2][0] : 0;
-  a2=cos(a4);
+  a2=(a3/a7);
+  if (res[0]!=0) res[0][2]=a2;
+  a2=sin(a6);
   a0=(a0*a2);
-  a4=sin(a4);
-  a3=(a3*a4);
-  a0=(a0-a3);
-  a3=1.;
-  a4=arg[0]? arg[0][3] : 0;
-  a4=(a5*a4);
-  a3=(a3-a4);
-  a0=(a0/a3);
-  a5=(a5*a0);
-  a1=(a1-a5);
-  if (res[0]!=0) res[0][4]=a1;
+  a6=cos(a6);
+  a8=(a8*a6);
+  a0=(a0+a8);
+  a0=(a0/a7);
+  if (res[0]!=0) res[0][3]=a0;
+  a10=(a10*a7);
+  a3=(a3-a10);
+  a3=(a3/a7);
+  if (res[0]!=0) res[0][4]=a3;
   return 0;
 }
 
@@ -311,7 +316,7 @@ CASADI_SYMBOL_EXPORT int f_fun_work(casadi_int *sz_arg, casadi_int* sz_res, casa
 #ifdef MATLAB_MEX_FILE
 void mex_f_fun(int resc, mxArray *resv[], int argc, const mxArray *argv[]) {
   casadi_int i;
-  casadi_real w[21];
+  casadi_real w[27];
   casadi_int *iw = 0;
   const casadi_real* arg[4] = {0};
   casadi_real* res[1] = {0};

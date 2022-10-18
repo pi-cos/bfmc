@@ -61,7 +61,7 @@ beta = atan(l_r/(l_f+l_r)*tan(d));
 v = vx/cos(beta); % local
 vy = v*sin(beta); % local
 
-% eq
+% global
 dX = v*cos(psi+beta);
 dY = v*sin(psi+beta);
 dpsi = v/l_r*sin(beta);
@@ -79,7 +79,7 @@ x_dot=[ dX; ...
         dpsi; ... 
         dey; ...
         depsi ...
-        ];%./s_dot;  
+        ]./s_dot;  
  
 % algebraic function
 z_fun = [];                   
