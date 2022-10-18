@@ -91,14 +91,14 @@ mem = InitMemory(settings, opt, input);
 
 %% load track
 
-% ref_div = 100;
-% track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
-% track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
+ref_div = 1000;
+track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
+track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
 
-R = 5;
-vel = 1.5;
-ref_div = 100;
-track = mpc_create_circle(R,vel,settings.Ts_st/ref_div, settings.N+1);
+% R = 5;
+% vel = 1.5;
+% ref_div = 100;
+% track = mpc_create_circle(R,vel,settings.Ts_st/ref_div, settings.N+1);
 
 % path_length = 100;
 % vel = 1;
@@ -170,7 +170,7 @@ while time(end) < Tf % current_state.s
 
 %     input.od(1,:) = zeros(settings.N+1,1);
 %     input.y(3,:) = 0.1*ones(settings.N,1);
-    input.y(4,:) = deg2rad(5)*sin(time(end)*3)*ones(settings.N,1);
+%     input.y(4,:) = deg2rad(5)*sin(time(end)*3)*ones(settings.N,1);
     
     % call the NMPC solver 
     [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
