@@ -24,7 +24,8 @@ setup_solver
 
 %% simulation
 
-simulation_loop
+% simulation_loop
+simulation_loop_fcn
 
 %% plots
 

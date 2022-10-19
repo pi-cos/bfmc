@@ -71,8 +71,6 @@ else
 	[input] = InitData(settings);
 end  
 
-REF = [0,0,0,0];
-
 %% mem
 
 mem = InitMemory(settings, opt, input);
@@ -85,8 +83,8 @@ mem = InitMemory(settings, opt, input);
 
 R = 5;
 vel = 1.5;
-ref_div = 100;
-track = mpc_create_circle(R,vel,settings.Ts_st/ref_div, settings.N+1);
+config.ref_div = 100;
+track = mpc_create_circle(R,vel,settings.Ts_st/config.ref_div, settings.N+1);
 
 % path_length = 100;
 % vel = 1;
@@ -100,10 +98,14 @@ state_sim = input.x0';
 controls_MPC = input.u0';
 y_sim = [];
 constraints = [];
-CPT = [];
-ref_traj = [];
-KKT = [];
-OBJ=[];
-numIT=[];
+stats.CPT = [];
+stats.KKT = [];
+stats.OBJ = [];
+stats.numIT=[];
+computed_errors = [];
 
 last_ref_index = -1;
+
+%% config
+
+config.debug = 1;

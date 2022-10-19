@@ -33,10 +33,10 @@ while time(end) < Tf % current_state.s
         
     % the reference input.y is a ny by N matrix
     % the reference input.yN is a nyN by 1 vector    
-    input.y = repmat(REF',1,settings.N);
-    input.yN = REF(1:settings.nyN)';
+    input.y = zeros(settings.ny,settings.N);
+    input.yN = zeros(settings.nyN,1);
     % curvature
-    samples = curr_ref_index:ref_div:curr_ref_index+settings.N*ref_div;
+    samples = curr_ref_index:config.ref_div:curr_ref_index+settings.N*config.ref_div;
     samples_mod = mod(samples,length(track.s)-(settings.N+1));
     if any(samples ~= samples_mod)
         idx_zero = find(samples_mod==0);
@@ -95,7 +95,7 @@ while time(end) < Tf % current_state.s
     sim_input.x = state_sim(end,:).';
     sim_input.u = output.u(:,1);
     sim_input.z = input.z(:,1);
-    sim_input.p = input.od(:,1);
+    sim_input.p = input.od(:,1); % NOTE: k should be updated!!
 
     [xf, zf] = Simulate_System(sim_input.x, sim_input.u, sim_input.z, sim_input.p, mem, settings);
     xf = full(xf);
@@ -109,16 +109,16 @@ while time(end) < Tf % current_state.s
     % store the optimal solution and states
     controls_MPC = [controls_MPC; output.u(:,1)'];
     state_sim = [state_sim; xf'];
-    KKT= [KKT;OptCrit];
-    OBJ= [OBJ;output.info.objValue];
-    CPT = [CPT; cpt, tshooting, tcond, tqp];
-    numIT = [numIT; output.info.iteration_num];
+    stats.KKT= [stats.KKT;OptCrit];
+    stats.OBJ= [stats.OBJ;output.info.objValue];
+    stats.CPT = [stats.CPT; cpt, tshooting, tcond, tqp];
+    stats.numIT = [stats.numIT; output.info.iteration_num];
     
     % go to the next sampling instant
     nextTime = mem.iter*settings.Ts_st; 
     mem.iter = mem.iter+1;
     if mod(mem.iter,10)==1
-    disp(['current space:' num2str(nextTime) 'm  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num)]);  
+    disp(['current space:' num2str(nextTime) 'm  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(stats.OBJ(end)) '  SQP_IT:' num2str(output.info.iteration_num)]);  
     end
     time = [time nextTime];   
 end
@@ -137,5 +137,5 @@ clear mex;
 
 %%
 
-disp(['Average CPT: ', num2str(mean(CPT(2:end,:),1)) ]);
-disp(['Maximum CPT: ', num2str(max(CPT(2:end,:))) ]);
+disp(['Average CPT: ', num2str(mean(stats.CPT(2:end,:),1)) ]);
+disp(['Maximum CPT: ', num2str(max(stats.CPT(2:end,:))) ]);
