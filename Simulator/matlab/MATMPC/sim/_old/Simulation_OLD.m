@@ -1,24 +1,23 @@
-restoredefaultpath; clear all; clear mex; close all; clc;
 
-disp( ' ' );
-disp( 'MATMPC -- A (MAT)LAB based Model(M) Predictive(P) Control(C) Package.' );
-disp( 'Copyright (C) 2016-2019 by Yutao Chen, University of Padova' );
-disp( 'All rights reserved.' );
-disp( ' ' );
-disp( 'MATMPC is distributed under the terms of the' );
-disp( 'GNU General Public License 3.0 in the hope that it will be' );
-disp( 'useful, but WITHOUT ANY WARRANTY; without even the implied warranty' );
-disp( 'of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.' );
-disp( 'See the GNU General Public License for more details.' );
-disp( ' ' );
-disp( ' ' );
-disp('---------------------------------------------------------------------------------');
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% File Name: Simulation.m                                                 %
+%                                                                         %
+% Designed By: Enrico Picotti                                             %
+% Company    : UniPD                                                      %
+% Project    : Bosch RC Car                                               %
+% Purpose    : Simulates the RC car NMPC controller                       %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%
+
+restoredefaultpath; clear all; clear mex; close all; clc;
 
 %% Configuration (complete your configuration here...)
 addpath(genpath([pwd,'/nmpc']));
 
-rmpath(genpath([pwd,'/nmpc/solver/mac']));
-rmpath(genpath([pwd,'/nmpc/solver/linux']));
+% rmpath(genpath([pwd,'/nmpc/solver/mac']));
+% rmpath(genpath([pwd,'/nmpc/solver/linux']));
 % rmpath(genpath([pwd,'/nmpc/solver/windows']));
 
 addpath(genpath('init_fcn/'))
@@ -91,14 +90,14 @@ mem = InitMemory(settings, opt, input);
 
 %% load track
 
-ref_div = 1000;
-track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
-track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
+% ref_div = 1000;
+% track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
+% track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
 
-% R = 5;
-% vel = 1.5;
-% ref_div = 100;
-% track = mpc_create_circle(R,vel,settings.Ts_st/ref_div, settings.N+1);
+R = 5;
+vel = 1.5;
+ref_div = 100;
+track = mpc_create_circle(R,vel,settings.Ts_st/ref_div, settings.N+1);
 
 % path_length = 100;
 % vel = 1;
@@ -121,6 +120,7 @@ KKT = [];
 OBJ=[];
 numIT=[];
 
+% curr_ref_index = 1-ref_div;
 last_ref_index = -1;
 
 while time(end) < Tf % current_state.s
@@ -132,6 +132,7 @@ while time(end) < Tf % current_state.s
     search_indexes = (1:length(track.s)-(settings.N+1));
     squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
     [~, curr_ref_index] = min(squared_dist);
+%     curr_ref_index = curr_ref_index+1*ref_div;
     if last_ref_index - curr_ref_index > 0
         disp('Lap finished, break.')
         break

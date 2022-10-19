@@ -107,4 +107,4 @@ general_con_N = [];
 
 %% NMPC discretizing time length [s]
 
-Ts_st = 0.01; % shooting interval time
+Ts_st = 0.1; % shooting interval time
