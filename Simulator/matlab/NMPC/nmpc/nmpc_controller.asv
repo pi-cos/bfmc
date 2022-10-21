@@ -63,9 +63,7 @@ if iter == 1
     init_PSI = PSI;
 end
 
-X = X - init_X
-Y = Y - init_Y
-PSI = PSI - init_PSI
+
 
 %% find current pos on reference
 

@@ -18,15 +18,15 @@ figure(2)
 subplot(211)
 grid on
 hold on
-plot(controls_MPC(2:end,1))
+plot(controls_MPC(:,1))
 plot(out.controls(:,1),'--')
 % xlabel('space [m]');
 ylabel('v [m/s]')
 subplot(212)
-grid on
-hold on
-plot(rad2deg(controls_MPC(2:end,2)))
+
+plot(rad2deg(controls_MPC(:,2)))
 plot(rad2deg(out.controls(:,2)),'--')
+grid on
 % xlabel('space [m]');
 ylabel('\delta_f [deg]');
 
@@ -36,12 +36,12 @@ figure(3)
 subplot(211)
 hold on
 grid on
-plot(computed_errors(:,1),'--')
-% xlabel('space [m]');
+plot(time,computed_errors(:,1),'--')
+xlabel('space [m]');
 ylabel('e_y [m]')
 subplot(212)
 hold on
 grid on
-plot(rad2deg(computed_errors(:,2)),'--')
-% xlabel('space [m]');
+plot(time,rad2deg(computed_errors(:,2)),'--')
+xlabel('space [m]');
 ylabel('e_\psi [deg]');
