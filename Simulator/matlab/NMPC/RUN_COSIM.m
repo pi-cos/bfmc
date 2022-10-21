@@ -4,19 +4,28 @@
 % Designed By: Enrico Picotti                                             %
 % Company    : UniPD                                                      %
 % Project    : Bosch RC Car                                               %
-% Purpose    : INIT the cosimulation of RC car BOSCH sim & NMPC control   %
+% Purpose    : RUNS the cosimulation of RC car BOSCH sim & NMPC control   %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% to run the cosimulation:
-% 1: in a terminal run "source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash"
-% 2: in the same terminal run "roslaunch sim_pkg map_with_car.launch"
-% 3: run the simulink simulink_ros.slx
-
-% rosservice call /gazebo/reset_simulation --> NOT WORKING!!
 
 %% clear ws
 
 restoredefaultpath; clear all; clear mex; close all; clc;
+
+%% launch simulation
+
+% [status, cmdout] = unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; roslaunch sim_pkg map_with_car_nogui.launch');
+% unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; roslaunch sim_pkg map_with_car_nogui.launch')
+% pause(2);
+
+% note: rosservice call /gazebo/reset_simulation --> NOT WORKING!!
+
+disp('Launch the following command on terminal:')
+disp(' ')
+disp(['source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; '...
+    'roslaunch sim_pkg map_with_car_nogui.launch'])
+disp(' ')
+disp('then press enter to start the cosimulation.')
+pause()
 
 %% path
 
@@ -34,14 +43,17 @@ setup_solver
 setup.vel2motor = 1/1.4;
 setup.rad2deg = rad2deg(1);
 
-%%
-
-return
-
 %% run simulink
 
-sim('simulink_ros')
+disp(' ')
+disp('Starting simulink controller...')
+out = sim('simulink_ros');
 
 %% plots
 
 draw_cosim;
+
+%% terminate cosim
+
+disp(' ')
+disp('Press CTRL+C in terminal to stop simulatior.')
