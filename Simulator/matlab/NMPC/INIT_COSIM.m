@@ -4,9 +4,15 @@
 % Designed By: Enrico Picotti                                             %
 % Company    : UniPD                                                      %
 % Project    : Bosch RC Car                                               %
-% Purpose    : runs the cosimulation of RC car BOSCH sim & NMPC control   %
+% Purpose    : INIT the cosimulation of RC car BOSCH sim & NMPC control   %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% to run the cosimulation:
+% 1: in a terminal run "source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash"
+% 2: in the same terminal run "roslaunch sim_pkg map_with_car.launch"
+% 3: run the simulink simulink_ros.slx
+
+% rosservice call /gazebo/reset_simulation --> NOT WORKING!!
 
 %% clear ws
 
@@ -25,13 +31,8 @@ setup_solver
 
 %% cosim params
 
-setup.vel2motor = 1;
+setup.vel2motor = 1/1.4;
 setup.rad2deg = rad2deg(1);
-
-% !source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash
-% !roslaunch sim_pkg map_with_car_nogui.launch
-% roslaunch sim_pkg map_with_car.launch
-% rosservice call /gazebo/reset_simulation --> NOT WORKING!!
 
 %%
 

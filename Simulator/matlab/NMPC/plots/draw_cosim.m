@@ -5,7 +5,7 @@
 figure(1)
 hold on
 grid on
-plot(out.state_cosim(:,1)-out.state_cosim(1,1),out.state_cosim(:,2)-out.state_cosim(1,2))
+plot(out.state_cosim.signals.values(:,1),out.state_cosim.signals.values(:,2))
 R = 1/input.od(1);
 plot(track.X,track.Y,'k--');
 axis equal
@@ -18,16 +18,16 @@ figure(2)
 subplot(211)
 grid on
 hold on
-plot(controls_MPC(2:end,1))
-plot(out.controls(:,1),'--')
-% xlabel('space [m]');
-ylabel('v [m/s]')
+% plot(controls_MPC(2:end,1))
+plot(out.controls.time,out.controls.signals.values(:,1))
+% xlabel('time [s]');
+ylabel('motor speed')
 subplot(212)
 grid on
 hold on
-plot(rad2deg(controls_MPC(2:end,2)))
-plot(rad2deg(out.controls(:,2)),'--')
-% xlabel('space [m]');
+% plot(rad2deg(controls_MPC(2:end,2)))
+plot(out.controls.time,out.controls.signals.values(:,2))
+xlabel('time [s]');
 ylabel('\delta_f [deg]');
 
 %%
@@ -43,5 +43,5 @@ subplot(212)
 hold on
 grid on
 plot(rad2deg(computed_errors(:,2)),'--')
-% xlabel('space [m]');
+xlabel('iter [-]');
 ylabel('e_\psi [deg]');

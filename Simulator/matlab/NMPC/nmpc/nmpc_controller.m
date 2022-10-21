@@ -55,17 +55,6 @@ Y                   = states(2);
 PSI                 = states(3);
 % x_dot               = u(4);
 
-%% init adaptation
-
-if iter == 1
-    init_X = X;
-    init_Y = Y;
-    init_PSI = PSI;
-end
-
-X = X - init_X
-Y = Y - init_Y
-PSI = PSI - init_PSI
 
 %% find current pos on reference
 
