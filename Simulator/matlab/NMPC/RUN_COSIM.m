@@ -32,9 +32,13 @@ setup.vel2motor = 1;
 % roslaunch sim_pkg map_with_car.launch
 % rosservice call /gazebo/reset_simulation
 
+%%
+
+return
+
 %% run simulink
 
-sim('cosim_ros')
+sim('simulink_ros')
 
 %% plots
 
