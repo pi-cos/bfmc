@@ -26,7 +26,7 @@ end
 
 %% settings
 
-if exist('nmpc/data/settings.mat','file')==2
+if exist([pwd,'/nmpc/data/settings.mat'],'file')==2
     load nmpc/data/settings.mat
 else 
     error('No setting data is detected!');
