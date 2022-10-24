@@ -170,12 +170,12 @@ mxArray* casadi_to_mex(const casadi_int* sp, const casadi_real* x) {
 
 #endif
 
-static const casadi_int casadi_s0[9] = {5, 1, 0, 5, 0, 1, 2, 3, 4};
+static const casadi_int casadi_s0[11] = {7, 1, 0, 7, 0, 1, 2, 3, 4, 5, 6};
 static const casadi_int casadi_s1[6] = {2, 1, 0, 2, 0, 1};
 static const casadi_int casadi_s2[7] = {3, 1, 0, 3, 0, 1, 2};
 static const casadi_int casadi_s3[3] = {0, 0, 0};
 
-/* path_con_fun:(states[5],controls[2],params[3])->(general_con[]) */
+/* path_con_fun:(states[7],controls[2],params[3])->(general_con[]) */
 static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
   return 0;
 }
@@ -261,18 +261,18 @@ CASADI_SYMBOL_EXPORT int path_con_fun_work(casadi_int *sz_arg, casadi_int* sz_re
 #ifdef MATLAB_MEX_FILE
 void mex_path_con_fun(int resc, mxArray *resv[], int argc, const mxArray *argv[]) {
   casadi_int i;
-  casadi_real w[15];
+  casadi_real w[19];
   casadi_int *iw = 0;
   const casadi_real* arg[3] = {0};
   casadi_real* res[1] = {0};
   if (argc>3) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_fun\" failed. Too many input arguments (%d, max 3)", argc);
   if (resc>1) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_fun\" failed. Too many output arguments (%d, max 1)", resc);
-  if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+10);
-  if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+5, casadi_s1, w+10);
-  if (--argc>=0) arg[2] = casadi_from_mex(argv[2], w+7, casadi_s2, w+10);
+  if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+12);
+  if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+7, casadi_s1, w+12);
+  if (--argc>=0) arg[2] = casadi_from_mex(argv[2], w+9, casadi_s2, w+12);
   --resc;
-  res[0] = w+10;
-  i = path_con_fun(arg, res, iw, w+10, 0);
+  res[0] = w+12;
+  i = path_con_fun(arg, res, iw, w+12, 0);
   if (i) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"path_con_fun\" failed.");
   if (res[0]) resv[0] = casadi_to_mex(casadi_s3, res[0]);
 }

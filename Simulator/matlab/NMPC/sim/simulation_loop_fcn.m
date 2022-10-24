@@ -7,26 +7,31 @@ while time(end) < Tf % current_state.s
     X = state_sim(end,1);
     Y = state_sim(end,2);
     PSI = state_sim(end,3);
+    VX = state_sim(end,6);
+    DF = state_sim(end,7);
     
     % call NMPC
-    states = [X;Y;PSI];
+    states = [X;Y;PSI;VX;DF];
     ctrls = nmpc_controller(states);
-    if ctrls(end)
+    if ctrls(end) == 1
         break
+    elseif ctrls(end) == 0.5
+        sim_iter = sim_iter +1;
+        continue
     end
     
-    % Simulate system dynamics
-    sim_input.x = state_sim(end,:).';
-    sim_input.u = ctrls(1:settings.nu);
-    sim_input.z = input.z(:,1);
-    sim_input.p = input.od(:,1);
-    k = ctrls(3);
-    sim_input.p(1) = k;
+%     % Simulate system dynamics
+%     sim_input.x = state_sim(end,:).';
+%     sim_input.u = ctrls(1:settings.nu);
+%     sim_input.z = input.z(:,1);
+%     sim_input.p = input.od(:,1);
+%     k = ctrls(3);
+%     sim_input.p(1) = k;
+% 
+%     [xf, zf] = Simulate_System(sim_input.x, sim_input.u, sim_input.z, sim_input.p, mem, settings);
+%     xf = full(xf);
 
-    [xf, zf] = Simulate_System(sim_input.x, sim_input.u, sim_input.z, sim_input.p, mem, settings);
-    xf = full(xf);
-
-    state_sim = [state_sim; xf'];
+%     state_sim = [state_sim; xf'];
     
     % go to the next sampling instant
     sim_iter = sim_iter+1;

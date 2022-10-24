@@ -42,32 +42,44 @@ switch settings.model
 
         figure(2)
         subplot(211)
-        plot(time,controls_MPC(:,1))
+        plot(time(1:size(controls_MPC,1)),controls_MPC(:,1))
         grid on
         xlabel('space [m]');
-        ylabel('v [m/s]')
+        ylabel('$\dot{v} [m/s^2]$','Interpreter','latex')
         subplot(212)
-        plot(time,rad2deg(controls_MPC(:,2)))
+        plot(time(1:size(controls_MPC,1)),rad2deg(controls_MPC(:,2)))
         grid on
         xlabel('space [m]');
-        ylabel('\delta_f [deg]');
+        ylabel('$\dot{\delta}_f [deg/s]$','Interpreter','latex');
 
         figure(3)
         subplot(211)
         hold on
         grid on
-        plot(time,state_sim(:,4))
-        plot(time,computed_errors(:,1),'--')
+        plot(time(1:size(state_sim,1)),state_sim(:,4))
+        plot(time(1:size(computed_errors,1)),computed_errors(:,1),'--')
         xlabel('space [m]');
         ylabel('e_y [m]')
         legend('state sim','computed')
         subplot(212)
         hold on
         grid on
-        plot(time,rad2deg(state_sim(:,5)))
-        plot(time,rad2deg(computed_errors(:,2)),'--')
+        plot(time(1:size(state_sim,1)),rad2deg(state_sim(:,5)))
+        plot(time(1:size(computed_errors,1)),rad2deg(computed_errors(:,2)),'--')
         xlabel('space [m]');
         ylabel('e_\psi [deg]');
         legend('state sim','computed')
+
+        figure(4)
+        subplot(211)
+        plot(time(1:size(state_sim,1)),state_sim(:,6))
+        grid on
+        xlabel('space [m]');
+        ylabel('$v [m/s]$','Interpreter','latex')
+        subplot(212)
+        plot(time(1:size(state_sim,1)),rad2deg(state_sim(:,7)))
+        grid on
+        xlabel('space [m]');
+        ylabel('$\delta_f [deg]$','Interpreter','latex');
 
 end

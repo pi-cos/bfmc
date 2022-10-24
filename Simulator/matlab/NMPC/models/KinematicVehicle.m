@@ -9,11 +9,11 @@
 
 %% Dimensions
 
-nx=5;  % No. of differential states
+nx=7;  % No. of differential states
 nu=2;  % No. of controls
 nz=0;  % No. of algebraic states
-ny=4; % No. of outputs
-nyN=2; % No. of outputs at the terminal point
+ny=5; % No. of outputs
+nyN=3; % No. of outputs at the terminal point
 np=3; % No. of model parameters
 nc=0; % No. of general constraints
 ncN=0; % No. of general constraints at the terminal point
@@ -21,7 +21,7 @@ nbx = 2; % No. of bounds on states
 nbu = 2; % No. of bounds on controls
 
 % state and control bounds
-nbx_idx = [4,5]; % indexs of states which are bounded
+nbx_idx = [4,5,6,7]; % indexs of states which are bounded
 nbu_idx = [1,2]; % indexs of controls which are bounded
 
 %% create variables
@@ -51,8 +51,11 @@ psi = states(3);
 e_y = states(4);
 e_psi = states(5);
 
-vx = controls(1); % local
-d = controls(2);
+vx = states(6); % local
+d = states(7);
+
+vx_dot = controls(1);
+d_dot = controls(2);
 
 % sideslip
 beta = atan(l_r/(l_f+l_r)*tan(d));
@@ -78,7 +81,9 @@ x_dot=[ dX; ...
         dY; ...
         dpsi; ... 
         dey; ...
-        depsi ...
+        depsi; ...
+        vx_dot; ...
+        d_dot ...
         ]./s_dot;  
  
 % algebraic function
@@ -91,7 +96,7 @@ impl_f = xdot - x_dot;
 %% Objectives and constraints
 
 % inner objectives
-h = [e_y;e_psi;v;d];
+h = [e_y;e_psi;vx;vx_dot;d_dot];
 hN = h(1:nyN);
 
 % outer objectives
@@ -107,4 +112,4 @@ general_con_N = [];
 
 %% NMPC discretizing time length [s]
 
-Ts_st = 0.1; % shooting interval time
+Ts_st = 0.05; % shooting interval time

@@ -170,20 +170,20 @@ mxArray* casadi_to_mex(const casadi_int* sp, const casadi_real* x) {
 
 #endif
 
-static const casadi_int casadi_s0[9] = {5, 1, 0, 5, 0, 1, 2, 3, 4};
+static const casadi_int casadi_s0[11] = {7, 1, 0, 7, 0, 1, 2, 3, 4, 5, 6};
 static const casadi_int casadi_s1[6] = {2, 1, 0, 2, 0, 1};
 static const casadi_int casadi_s2[7] = {3, 1, 0, 3, 0, 1, 2};
 static const casadi_int casadi_s3[4] = {0, 1, 0, 0};
 
-/* f_fun:(states[5],controls[2],params[3],alg[0])->(xdot[5]) */
+/* f_fun:(states[7],controls[2],params[3],alg[0])->(xdot[7]) */
 static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
   casadi_real a0, a1, a10, a11, a2, a3, a4, a5, a6, a7, a8, a9;
-  a0=arg[1]? arg[1][0] : 0;
+  a0=arg[0]? arg[0][5] : 0;
   a1=arg[2]? arg[2][1] : 0;
   a2=arg[2]? arg[2][2] : 0;
   a2=(a2+a1);
   a2=(a1/a2);
-  a3=arg[1]? arg[1][1] : 0;
+  a3=arg[0]? arg[0][6] : 0;
   a3=tan(a3);
   a2=(a2*a3);
   a2=atan(a2);
@@ -230,6 +230,12 @@ static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw,
   a3=(a3-a10);
   a3=(a3/a7);
   if (res[0]!=0) res[0][4]=a3;
+  a3=arg[1]? arg[1][0] : 0;
+  a3=(a3/a7);
+  if (res[0]!=0) res[0][5]=a3;
+  a3=arg[1]? arg[1][1] : 0;
+  a3=(a3/a7);
+  if (res[0]!=0) res[0][6]=a3;
   return 0;
 }
 
@@ -316,19 +322,19 @@ CASADI_SYMBOL_EXPORT int f_fun_work(casadi_int *sz_arg, casadi_int* sz_res, casa
 #ifdef MATLAB_MEX_FILE
 void mex_f_fun(int resc, mxArray *resv[], int argc, const mxArray *argv[]) {
   casadi_int i;
-  casadi_real w[27];
+  casadi_real w[31];
   casadi_int *iw = 0;
   const casadi_real* arg[4] = {0};
   casadi_real* res[1] = {0};
   if (argc>4) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"f_fun\" failed. Too many input arguments (%d, max 4)", argc);
   if (resc>1) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"f_fun\" failed. Too many output arguments (%d, max 1)", resc);
-  if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+15);
-  if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+5, casadi_s1, w+15);
-  if (--argc>=0) arg[2] = casadi_from_mex(argv[2], w+7, casadi_s2, w+15);
-  if (--argc>=0) arg[3] = casadi_from_mex(argv[3], w+10, casadi_s3, w+15);
+  if (--argc>=0) arg[0] = casadi_from_mex(argv[0], w, casadi_s0, w+19);
+  if (--argc>=0) arg[1] = casadi_from_mex(argv[1], w+7, casadi_s1, w+19);
+  if (--argc>=0) arg[2] = casadi_from_mex(argv[2], w+9, casadi_s2, w+19);
+  if (--argc>=0) arg[3] = casadi_from_mex(argv[3], w+12, casadi_s3, w+19);
   --resc;
-  res[0] = w+10;
-  i = f_fun(arg, res, iw, w+15, 0);
+  res[0] = w+12;
+  i = f_fun(arg, res, iw, w+19, 0);
   if (i) mexErrMsgIdAndTxt("Casadi:RuntimeError","Evaluation of \"f_fun\" failed.");
   if (res[0]) resv[0] = casadi_to_mex(casadi_s0, res[0]);
 }

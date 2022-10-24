@@ -51,10 +51,11 @@ end
 
 %% input set
 
-X_real                   = states(1);
-Y_real                   = states(2);
-PSI_real                 = states(3);
-% x_dot               = u(4);
+X_real    = states(1);
+Y_real    = states(2);
+PSI_real  = states(3);
+VX        = states(4);
+DF        = states(5);
 
 %% init pos and rot 
 
@@ -70,16 +71,21 @@ if iter == 10
     init_PSI = PSI_real;
 end
 
+if VX < 0.1
+    VX = 0.1;
+    warning('Settings VX to 0.1!')
+end
+
 PSI = PSI_real - init_PSI;
 rotMat = @(psi) [cos(psi) -sin(psi); sin(psi), cos(psi)];
 XY = rotMat(-init_PSI)*[X_real - init_X; Y_real - init_Y];
 X = XY(1);
 Y = XY(2);
-state_cosim = [state_cosim,[XY;PSI]];
+state_cosim = [state_cosim,[XY;PSI;VX;DF]];
 
 %% find current pos on reference
 
-search_indexes = (1:length(track.s)-(settings.N+1));
+search_indexes = (1:length(track.s)-(settings.N+1)*config.ref_div);
 squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 [~, curr_ref_index] = min(squared_dist);
 if last_ref_index - curr_ref_index > 0
@@ -103,7 +109,7 @@ computed_errors(mem.iter,:) = [e_y,e_psi];
 
 %% update input for NMPC
 % update state
-input.x0 = [X;Y;PSI;e_y;e_psi];
+input.x0 = [X;Y;PSI;e_y;e_psi;VX;DF];
 
 % update ref
 % the reference input.y is a ny by N matrix
@@ -119,11 +125,17 @@ if any(ref_samples ~= ref_samples_mod)
     ref_samples = ref_samples_mod;
 end
 input.y(3,:) = track.v(ref_samples(1:end-1));
+input.yN(3) = track.v(ref_samples(end));
 
 % update params
 input.od(1,:) = track.k(ref_samples);
 
 %% NMPC
+
+if any(input.x(6,:) < 0.1)
+    input.x(6,input.x(6,:)<0.1) = 0.1;
+    warning('Settings input.x to 0.1!')
+end
 
 % call the NMPC solver 
 try
@@ -200,9 +212,9 @@ end
 % go to the next sampling instant
 nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
-if mod(mem.iter,10)==1
+% if mod(mem.iter,10)==1
     disp(['current space:' num2str(nextTime) 'm  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
-end
+% end
 iter = iter+1;
 
 %% output
@@ -215,7 +227,7 @@ ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop];
 
 %     function cleanMeUp()
         if config.debug 
-%             computed_errors(mem.iter,:) = [e_y,e_psi];
+            computed_errors(mem.iter,:) = [e_y,e_psi];
             assignin('base','stats',stats);
             assignin('base','controls_MPC',controls_MPC);
             assignin('base','state_sim',state_sim);
