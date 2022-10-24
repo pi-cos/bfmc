@@ -48,8 +48,8 @@ function [input] = InitData(settings)
                     0.1; ... l_r
                     0.15]; % l_f
 
-            Q=repmat([1 1 1 0.5 0.5]',1,N);
-            QN=[1 1 1]';
+            Q=repmat([1 1 1 0.1 0.5]',1,N);
+            QN=[10 10 1]';
 
             % upper and lower bounds for states (=nbx)
             lb_x = [-0.5;-pi/2; 0;-deg2rad(45)];

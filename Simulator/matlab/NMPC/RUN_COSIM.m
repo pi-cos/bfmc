@@ -40,6 +40,9 @@ setup.vel2motor = 1/1.4;
 setup.rad2deg = rad2deg(1);
 setup.stop_time = inf; %[s]
 
+setup.sim_ts = 1e-2;
+setup.nmpc_ts = 1e-2;
+
 %% run simulink
 
 disp(' ')

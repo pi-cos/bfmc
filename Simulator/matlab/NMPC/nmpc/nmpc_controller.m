@@ -60,7 +60,9 @@ DF        = states(5);
 %% init pos and rot 
 
 if iter < 10
-    ctrls = [zeros(settings.nu,1);0;0];
+    reset = 1;
+    stop = 0;
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
     iter = iter+1;
     return
 end
@@ -85,14 +87,15 @@ state_cosim = [state_cosim,[XY;PSI;VX;DF]];
 
 %% find current pos on reference
 
-search_indexes = (1:length(track.s)-(settings.N+1)*config.ref_div);
+search_indexes = (1:length(track.s)-(settings.N+1));
 squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 [~, curr_ref_index] = min(squared_dist);
 if last_ref_index - curr_ref_index > 0
     disp(' ------------------------------ ')
     disp(' ****** TRACK COMPLETED! ****** ')
+    reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop];
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
     return
 else
     stop = 0;
@@ -150,8 +153,9 @@ catch
 %     output.info.objValue = 0;
 %     output.info.iteration_num = 0;
     warning('failed NMPC.');
+    reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop];
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
     return
 end
 
@@ -210,16 +214,16 @@ if config.debug
 end
 
 % go to the next sampling instant
-nextTime = mem.iter*settings.Ts_st;
+% nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
 % if mod(mem.iter,10)==1
-    disp(['current space:' num2str(nextTime) 'm  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
+    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
 % end
 iter = iter+1;
 
 %% output
-
-ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop];
+reset = 0;
+ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset];
 
 %% clean me up function, called when stop
 

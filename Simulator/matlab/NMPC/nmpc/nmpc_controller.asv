@@ -22,7 +22,7 @@ persistent track settings opt mem input config
 persistent init_X init_Y init_PSI
 
 % debug variables
-persistent controls_MPC state_sim y_sim constraints stats computed_errors
+persistent controls_MPC state_sim y_sim constraints stats computed_errors state_cosim
 
 % needed variables
 if isempty(iter)
@@ -46,30 +46,44 @@ if (config.debug && isempty(state_sim))
     constraints     = evalin('base','constraints');
     stats           = evalin('base','stats');
     computed_errors = evalin('base','computed_errors');
+    state_cosim = [];
 end
 
 %% input set
 
-X_real                   = states(1);
-Y_real                   = states(2);
-PSI_real                 = states(3);
-% x_dot               = u(4);
+X_real    = states(1);
+Y_real    = states(2);
+PSI_real  = states(3);
+VX        = states(4);
+DF        = states(5);
 
 %% init pos and rot 
 
-if iter == 1
+if iter < 10
+    reset = 1;
+    stop = 1;
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
+    iter = iter+1;
+    return
+end
+
+if iter == 10
     init_X = X_real;
     init_Y = Y_real;
     init_PSI = PSI_real;
 end
 
-% X = ;
-% Y = Y - init_Y;
-PSI = PSI_real - init_PSI;
+if VX < 0.1
+    VX = 0.1;
+    warning('Settings VX to 0.1!')
+end
 
-XY = rotMat(-init_PSI)*[X - init_X; Y - init_Y];
+PSI = PSI_real - init_PSI;
+rotMat = @(psi) [cos(psi) -sin(psi); sin(psi), cos(psi)];
+XY = rotMat(-init_PSI)*[X_real - init_X; Y_real - init_Y];
 X = XY(1);
 Y = XY(2);
+state_cosim = [state_cosim,[XY;PSI;VX;DF]];
 
 %% find current pos on reference
 
@@ -79,8 +93,9 @@ squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 if last_ref_index - curr_ref_index > 0
     disp(' ------------------------------ ')
     disp(' ****** TRACK COMPLETED! ****** ')
+    reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop];
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
     return
 else
     stop = 0;
@@ -97,7 +112,7 @@ computed_errors(mem.iter,:) = [e_y,e_psi];
 
 %% update input for NMPC
 % update state
-input.x0 = [X;Y;PSI;e_y;e_psi];
+input.x0 = [X;Y;PSI;e_y;e_psi;VX;DF];
 
 % update ref
 % the reference input.y is a ny by N matrix
@@ -113,14 +128,35 @@ if any(ref_samples ~= ref_samples_mod)
     ref_samples = ref_samples_mod;
 end
 input.y(3,:) = track.v(ref_samples(1:end-1));
+input.yN(3) = track.v(ref_samples(end));
 
 % update params
 input.od(1,:) = track.k(ref_samples);
 
 %% NMPC
 
+if any(input.x(6,:) < 0.1)
+    input.x(6,input.x(6,:)<0.1) = 0.1;
+    warning('Settings input.x to 0.1!')
+end
+
 % call the NMPC solver 
-[output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
+try
+    [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
+catch
+%     output = input;
+%     output.info.cpuTime = 0;
+%     output.info.shootTime = 0;
+%     output.info.condTime = 0;
+%     output.info.qpTime = 0;
+%     output.info.OptCrit = 0;
+%     output.info.objValue = 0;
+%     output.info.iteration_num = 0;
+    warning('failed NMPC.');
+    stop = 1;
+    ctrls = [zeros(settings.nu,1);0;stop];
+    return
+end
 
 % obtain the solution and update the data
     switch opt.shifting
@@ -179,14 +215,14 @@ end
 % go to the next sampling instant
 nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
-if mod(mem.iter,10)==1
-    disp(['current space:' num2str(nextTime) 'm  CPT:' num2str(cpt) 'ms  SHOOTING:' num2str(tshooting) 'ms  COND:' num2str(tcond) 'ms  QP:' num2str(tqp) 'ms  Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
-end
+% if mod(mem.iter,10)==1
+    disp(['Iter ',num2str(mem.iter),', current space:' num2str(nextTime) 'm, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
+% end
 iter = iter+1;
 
 %% output
 
-ctrls = [output.u(:,1);track.k(ref_samples(1));stop];
+ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop];
 
 %% clean me up function, called when stop
 
@@ -197,10 +233,11 @@ ctrls = [output.u(:,1);track.k(ref_samples(1));stop];
             computed_errors(mem.iter,:) = [e_y,e_psi];
             assignin('base','stats',stats);
             assignin('base','controls_MPC',controls_MPC);
-%             assignin('base','state_sim',state_sim);
+            assignin('base','state_sim',state_sim);
             assignin('base','y_sim',y_sim);
             assignin('base','constraints',constraints);
             assignin('base','computed_errors',computed_errors);
+            assignin('base','state_cosim',state_cosim);
         end
 %     end
 
