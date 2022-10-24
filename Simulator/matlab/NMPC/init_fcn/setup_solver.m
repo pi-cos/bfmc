@@ -81,7 +81,7 @@ mem = InitMemory(settings, opt, input);
 % track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
 % track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
 
-R = 5;
+R = 2;
 vel = 1.5;
 config.ref_div = 100;
 track = mpc_create_circle(R,vel,settings.Ts_st/config.ref_div, settings.N+1);

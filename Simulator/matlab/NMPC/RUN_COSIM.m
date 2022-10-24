@@ -13,19 +13,15 @@ restoredefaultpath; clear all; clear mex; close all; clc;
 
 %% launch simulation
 
-% [status, cmdout] = unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; roslaunch sim_pkg map_with_car_nogui.launch');
-% unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; roslaunch sim_pkg map_with_car_nogui.launch')
-% pause(2);
-
-% note: rosservice call /gazebo/reset_simulation --> NOT WORKING!!
-
-disp('Launch the following command on terminal:')
+disp('Launch the following command on terminal to start the simulation the first time:')
 disp(' ')
 disp(['source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; '...
     'roslaunch sim_pkg map_with_car_nogui.launch'])
 disp(' ')
-disp('then press enter to start the cosimulation.')
-pause()
+% disp('then press enter to start the cosimulation.')
+% pause()
+
+unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; rosservice call /gazebo/reset_simulation');
 
 %% path
 
@@ -42,6 +38,7 @@ setup_solver
 
 setup.vel2motor = 1/1.4;
 setup.rad2deg = rad2deg(1);
+setup.stop_time = inf; %[s]
 
 %% run simulink
 
@@ -56,4 +53,4 @@ draw_cosim;
 %% terminate cosim
 
 disp(' ')
-disp('Press CTRL+C in terminal to stop simulatior.')
+disp('Press CTRL+C in terminal to stop simulation.')

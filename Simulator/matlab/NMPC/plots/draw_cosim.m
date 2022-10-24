@@ -5,9 +5,10 @@
 figure(1)
 hold on
 grid on
-plot(out.state_cosim.signals.values(:,1),out.state_cosim.signals.values(:,2))
+plot(out.state_cosim.signals.values(:,1),out.state_cosim.signals.values(:,2),'x-')
 R = 1/input.od(1);
 plot(track.X,track.Y,'k--');
+plot(state_cosim(1,:),state_cosim(2,:),'o-');
 axis equal
 xlabel('X [m]');
 ylabel('Y [m]');
@@ -45,3 +46,16 @@ grid on
 plot(rad2deg(computed_errors(:,2)),'--')
 xlabel('iter [-]');
 ylabel('e_\psi [deg]');
+
+%%
+
+return
+
+%%
+
+figure(4)
+clf
+hold on
+grid on
+plot(rad2deg(out.state_cosim.signals.values(:,3)),'x-')
+plot(rad2deg(state_cosim(3,:)),'o-');

@@ -22,7 +22,7 @@ persistent track settings opt mem input config
 persistent init_X init_Y init_PSI
 
 % debug variables
-persistent controls_MPC state_sim y_sim constraints stats computed_errors state_cosim
+persistent controls_MPC state_sim y_sim constraints stats computed_errors
 
 % needed variables
 if isempty(iter)
@@ -46,36 +46,30 @@ if (config.debug && isempty(state_sim))
     constraints     = evalin('base','constraints');
     stats           = evalin('base','stats');
     computed_errors = evalin('base','computed_errors');
-    state_cosim = [];
 end
 
 %% input set
 
 X_real                   = states(1);
 Y_real                   = states(2);
-PSI_real                 = -states(3);
+PSI_real                 = states(3);
 % x_dot               = u(4);
 
 %% init pos and rot 
 
-if iter < 10
-    ctrls = [zeros(settings.nu,1);0;0];
-    iter = iter+1;
-    return
-end
-
-if iter == 10
+if iter == 1
     init_X = X_real;
     init_Y = Y_real;
     init_PSI = PSI_real;
 end
 
+% X = ;
+% Y = Y - init_Y;
 PSI = PSI_real - init_PSI;
-rotMat = @(psi) [cos(psi) -sin(psi); sin(psi), cos(psi)];
-XY = rotMat(-init_PSI)*[X_real - init_X; Y_real - init_Y];
+
+XY = rotMat(-init_PSI)*[X - init_X; Y - init_Y];
 X = XY(1);
 Y = XY(2);
-state_cosim = [state_cosim,[XY;PSI]];
 
 %% find current pos on reference
 
@@ -126,22 +120,7 @@ input.od(1,:) = track.k(ref_samples);
 %% NMPC
 
 % call the NMPC solver 
-try
-    [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
-catch
-%     output = input;
-%     output.info.cpuTime = 0;
-%     output.info.shootTime = 0;
-%     output.info.condTime = 0;
-%     output.info.qpTime = 0;
-%     output.info.OptCrit = 0;
-%     output.info.objValue = 0;
-%     output.info.iteration_num = 0;
-    warning('failed NMPC.');
-    stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop];
-    return
-end
+[output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
 
 % obtain the solution and update the data
     switch opt.shifting
@@ -207,7 +186,7 @@ iter = iter+1;
 
 %% output
 
-ctrls = [output.u(1,1);-input.u(2,1);track.k(ref_samples(1));stop];
+ctrls = [output.u(:,1);track.k(ref_samples(1));stop];
 
 %% clean me up function, called when stop
 
@@ -215,14 +194,13 @@ ctrls = [output.u(1,1);-input.u(2,1);track.k(ref_samples(1));stop];
 
 %     function cleanMeUp()
         if config.debug 
-%             computed_errors(mem.iter,:) = [e_y,e_psi];
+            computed_errors(mem.iter,:) = [e_y,e_psi];
             assignin('base','stats',stats);
             assignin('base','controls_MPC',controls_MPC);
-            assignin('base','state_sim',state_sim);
+%             assignin('base','state_sim',state_sim);
             assignin('base','y_sim',y_sim);
             assignin('base','constraints',constraints);
             assignin('base','computed_errors',computed_errors);
-            assignin('base','state_cosim',state_cosim);
         end
 %     end
 
