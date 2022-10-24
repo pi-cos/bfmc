@@ -5,8 +5,8 @@
 figure(1)
 hold on
 grid on
-plot(out.state_cosim.signals.values(:,1),out.state_cosim.signals.values(:,2),'x-')
-R = 1/input.od(1);
+% plot(out.state_cosim.signals.values(:,1),out.state_cosim.signals.values(:,2),'x-')
+% R = 1/input.od(1);
 plot(track.X,track.Y,'k--');
 plot(state_cosim(1,:),state_cosim(2,:),'o-');
 axis equal

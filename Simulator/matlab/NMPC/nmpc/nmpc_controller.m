@@ -53,7 +53,7 @@ end
 
 X_real                   = states(1);
 Y_real                   = states(2);
-PSI_real                 = -states(3);
+PSI_real                 = states(3);
 % x_dot               = u(4);
 
 %% init pos and rot 
@@ -207,7 +207,7 @@ iter = iter+1;
 
 %% output
 
-ctrls = [output.u(1,1);-input.u(2,1);track.k(ref_samples(1));stop];
+ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop];
 
 %% clean me up function, called when stop
 
