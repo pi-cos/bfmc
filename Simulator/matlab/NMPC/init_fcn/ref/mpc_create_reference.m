@@ -15,7 +15,7 @@ if nargin<2
 end
 
 % create a reference trajectory from a drd file
-[x, y, ~, w, ~, v, s, crv] = readdrd_closed_smooth(drd_filename_in);
+[x, y, ~, w, ~, v, s, crv] = readdrd(drd_filename_in);
 
 x = -x;
 y = -y;

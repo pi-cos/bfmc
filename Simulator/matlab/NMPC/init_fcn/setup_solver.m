@@ -77,14 +77,14 @@ mem = InitMemory(settings, opt, input);
 
 %% track
 
-% ref_div = 1000;
-% track = mpc_create_reference('bosch_path_smooth.drd', settings.Ts_st/ref_div, settings.N+1);
-% track.v = smooth(1./(abs(track.k)+1),10/settings.Ts_st);
-
-R = 2;
-vel = 1.5;
 config.ref_div = 100;
-track = mpc_create_circle(R,vel,settings.Ts_st/config.ref_div, settings.N+1);
+track = mpc_create_reference('sparcs_track_small.drd', settings.Ts_st/config.ref_div, settings.N+1);
+track.v = 0.75*ones(length(track.s));%smooth(1./(abs(track.k)+1),10/settings.Ts_st);
+
+% R = 2;
+% vel = 1.5;
+% config.ref_div = 100;
+% track = mpc_create_circle(R,vel,settings.Ts_st/config.ref_div, settings.N+1);
 
 % path_length = 100;
 % vel = 1;
