@@ -36,10 +36,6 @@ plot(fval(:,1), fval(:,2),'*')
 clearvars
 load multiobjective_test_results
 fval_mo = fval;
-figure(1)
-grid on
-hold on
-plot(fval(:,1), fval(:,2),'*')
 
 %%
 
