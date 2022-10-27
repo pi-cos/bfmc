@@ -1,4 +1,4 @@
-function y = simple_objective(x)
+function y = simple_multiobjective(x)
 %SIMPLE_MULTIOBJECTIVE is a simple multi-objective fitness function.
 %
 % The multi-objective genetic algorithm solver assumes the fitness function
@@ -8,7 +8,9 @@ function y = simple_objective(x)
 % return argument y.
 
 %   Copyright 2007 The MathWorks, Inc. 
+alpha = 0.1;
+y = alpha*simple_objective1(x) + (1-alpha)*simple_objective2(x);
+end
 
-y_fun @x = (x+2)^2 - 10;
 
 
