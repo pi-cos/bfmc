@@ -1,0 +1,14 @@
+
+
+restoredefaultpath; clear all; close all; clc;
+
+%%
+
+fun = @simple_objective;
+vars = optimizableVariable('xvar',[-10 +10],'Type','real');
+
+fun(9)
+
+%%
+
+results = bayesopt(fun,vars,'IsObjectiveDeterministic',true);
