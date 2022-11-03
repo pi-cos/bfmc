@@ -30,7 +30,7 @@ setup.sim_ts = 1e-2;
 %% open simulink
 
 open('nmpc_sim/cosim/simulink/simulink_ros.slx')
-% run_cosim([1 2 3 4 5]);
+run_cosim([1 2 3 4 5]);
 
 %% set genetic algorithm
 

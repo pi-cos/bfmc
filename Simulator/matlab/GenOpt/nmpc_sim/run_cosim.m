@@ -15,8 +15,13 @@ set_param('simulink_ros/WEIGHT3','Value',num2str(weights(3)))
 set_param('simulink_ros/WEIGHT4','Value',num2str(weights(4)))
 set_param('simulink_ros/WEIGHT5','Value',num2str(weights(5)))
 out = sim('simulink_ros.slx');
+finished = out.nmpc_output.signals.values(end,8);
 e_y = out.nmpc_output.signals.values(:,6);
-y = [mean(e_y);var(e_y)];
+if finished
+    y = [mean(e_y);var(e_y)];
+else
+    y = [1e10;1e10];
+end
 
 
 end

@@ -69,14 +69,14 @@ w5 = states(11);
 if newLoc < 0.5
     reset = 0;
     stop = 0;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0];
     return
 end
 
 if iter < 10
     reset = 1;
     stop = 0;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0];
     iter = iter+1;
     return
 end
@@ -111,12 +111,12 @@ state_cosim = [state_cosim,[XY;PSI;VX;DF]];
 search_indexes = (1:length(track.s)-(settings.N+1));
 squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 [~, curr_ref_index] = min(squared_dist);
-if last_ref_index - curr_ref_index > 0
+if last_ref_index - curr_ref_index > 0 && iter > 100
     disp(' ------------------------------ ')
     disp(' ****** TRACK COMPLETED! ****** ')
     reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;1];
     return
 else
     stop = 0;
@@ -176,7 +176,7 @@ catch
     warning('failed NMPC.');
     reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0];
     return
 end
 
@@ -244,7 +244,7 @@ iter = iter+1;
 
 %% output
 reset = 0;
-ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi];
+ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi;0];
 
 %% clean me up function, called when stop
 
