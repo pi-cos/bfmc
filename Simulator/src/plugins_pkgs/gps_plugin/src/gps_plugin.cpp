@@ -2,11 +2,11 @@
 #include "gps_plugin.hpp"
 
 #define DEBUG true
-#define GPS_STD 0.07 // [m]
+#define GPS_STD 0.0 // [m]
 #define PROB_OF_STARTING_LOSING_PKGS 0.0//0.01
 #define MAX_TIME_PKG_LOSS 0.0//1.2 // [s]
-#define TIMER_GPS 0.1
-#define GPS_DELAY 5
+#define TIMER_GPS 0.01
+#define GPS_DELAY 0
 
 namespace gazebo
 {

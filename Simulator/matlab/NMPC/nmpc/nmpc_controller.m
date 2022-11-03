@@ -51,13 +51,21 @@ end
 
 %% input set
 
-X_real    = states(1);
-Y_real    = states(2);
-PSI_real  = states(3);
-VX        = states(4);
-DF        = states(5);
+newLoc    = states(1);
+X_real    = states(2);
+Y_real    = states(3);
+PSI_real  = states(4);
+VX        = states(5);
+DF        = states(6);
 
 %% init pos and rot 
+
+if newLoc < 0.5
+    reset = 0;
+    stop = 0;
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
+    return
+end
 
 if iter < 10
     reset = 1;
@@ -217,7 +225,7 @@ end
 % nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
 % if mod(mem.iter,10)==1
-    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
+    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, X =', num2str(X),'m, Y = ',num2str(Y),'m, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
 % end
 iter = iter+1;
 

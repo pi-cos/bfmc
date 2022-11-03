@@ -61,7 +61,7 @@ DF        = states(5);
 
 if iter < 10
     reset = 1;
-    stop = 1;
+    stop = 0;
     ctrls = [zeros(settings.nu,1);0;stop;reset];
     iter = iter+1;
     return
@@ -153,8 +153,9 @@ catch
 %     output.info.objValue = 0;
 %     output.info.iteration_num = 0;
     warning('failed NMPC.');
+    reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop];
+    ctrls = [zeros(settings.nu,1);0;stop;reset];
     return
 end
 
@@ -213,16 +214,16 @@ if config.debug
 end
 
 % go to the next sampling instant
-nextTime = mem.iter*settings.Ts_st;
+% nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
 % if mod(mem.iter,10)==1
-    disp(['Iter ',num2str(mem.iter),', current space:' num2str(nextTime) 'm, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
+    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
 % end
 iter = iter+1;
 
 %% output
-
-ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop];
+reset = 0;
+ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset];
 
 %% clean me up function, called when stop
 

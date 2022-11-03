@@ -48,7 +48,8 @@ function [input] = InitData(settings)
                     0.1; ... l_r
                     0.15]; % l_f
 
-            Q=repmat([1 1 1 0.1 0.5]',1,N);
+            % h = [e_y;e_psi;vx;vx_dot;d_dot];
+            Q=repmat([10 10 10 0.05 0.05]',1,N);
             QN=[10 10 1]';
 
             % upper and lower bounds for states (=nbx)
@@ -56,8 +57,8 @@ function [input] = InitData(settings)
             ub_x = [+0.5;+pi/2;+2;+deg2rad(45)];
 
             % upper and lower bounds for controls (=nbu)
-            lb_u = [-10;-10]; %
-            ub_u = [+10;+10]; %
+            lb_u = [-20;-20]; %
+            ub_u = [+20;+20]; %
 
             % upper and lower bounds for general constraints (=nc)
             lb_g = [];

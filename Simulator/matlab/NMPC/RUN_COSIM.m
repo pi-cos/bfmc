@@ -18,6 +18,7 @@ disp(' ')
 disp(['source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; '...
     'roslaunch sim_pkg map_with_car_nogui.launch'])
 disp(' ')
+disp('and open the simulink model /cosim/simulink/simulink_ros.slx')
 % disp('then press enter to start the cosimulation.')
 % pause()
 
@@ -41,7 +42,7 @@ setup.rad2deg = rad2deg(1);
 setup.stop_time = inf; %[s]
 
 setup.sim_ts = 1e-2;
-setup.nmpc_ts = 1e-2;
+% setup.nmpc_ts = 1e-2;
 
 %% run simulink
 
