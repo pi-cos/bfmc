@@ -69,14 +69,14 @@ w5 = states(11);
 if newLoc < 0.5
     reset = 0;
     stop = 0;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
     return
 end
 
 if iter < 10
     reset = 1;
     stop = 0;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
     iter = iter+1;
     return
 end
@@ -116,7 +116,7 @@ if last_ref_index - curr_ref_index > 0 && iter > 100
     disp(' ****** TRACK COMPLETED! ****** ')
     reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;1];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;1];
     return
 else
     stop = 0;
@@ -129,7 +129,10 @@ current_state.X = X;
 current_state.Y = Y;
 current_state.psi = PSI;
 [e_y, e_psi] = errors_calculator(current_state, curr_ref_index, track);
-computed_errors(mem.iter,:) = [e_y,e_psi];
+
+e_v = track.v(curr_ref_index)-VX;
+
+computed_errors(mem.iter,:) = [e_y, e_psi, e_v];
 
 %% update input for NMPC
 % update state
@@ -244,7 +247,7 @@ iter = iter+1;
 
 %% output
 reset = 0;
-ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi;0];
+ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi;e_v;0];
 
 %% clean me up function, called when stop
 
@@ -252,7 +255,7 @@ ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi
 
 %     function cleanMeUp()
         if config.debug 
-            computed_errors(mem.iter,:) = [e_y,e_psi];
+%             computed_errors(mem.iter,:) = [e_y,e_psi];
             assignin('base','stats',stats);
             assignin('base','controls_MPC',controls_MPC);
             assignin('base','state_sim',state_sim);

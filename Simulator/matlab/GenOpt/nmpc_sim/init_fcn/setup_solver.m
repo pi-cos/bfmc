@@ -77,9 +77,9 @@ mem = InitMemory(settings, opt, input);
 
 %% track
 
-config.ref_div = 100;
+config.ref_div = 10;
 track = mpc_create_reference('sparcs_track_small.drd', settings.Ts_st/config.ref_div, settings.N+1);
-track.v = 0.75*ones(length(track.s));%smooth(1./(abs(track.k)+1),10/settings.Ts_st);
+track.v = 2*smooth(1./(abs(track.k)+1),10/settings.Ts_st);%0.75*ones(length(track.s));%
 
 % R = 2;
 % vel = 1.5;
