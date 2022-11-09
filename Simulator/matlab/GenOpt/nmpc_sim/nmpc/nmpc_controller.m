@@ -160,7 +160,7 @@ input.od(1,:) = track.k(ref_samples);
 %% NMPC
 
 if any(input.x(6,:) < 0.1)
-    input.x(6,input.x(6,:)<0.1) = 0.1;
+    input.x(6,input.x(6,:)<0.25) = 0.25;
     warning('Settings input.x to 0.1!')
 end
 
@@ -179,7 +179,7 @@ catch
     warning('failed NMPC.');
     reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
     return
 end
 

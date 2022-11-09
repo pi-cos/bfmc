@@ -1,5 +1,5 @@
 %% 
-restoredefaultpath; clear all; close all; clc; %bdclose();
+restoredefaultpath; clear all; close all; clc;
 
 
 %% launch simulation

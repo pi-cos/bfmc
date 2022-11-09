@@ -6,8 +6,12 @@ function y = run_cosim(weights)
 
 unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; rosservice call /gazebo/reset_simulation');
 clear nmpc_controller
+bdclose();
+open('nmpc_sim/cosim/simulink/simulink_ros.slx')
 
 %%
+
+setup_solver
 
 set_param('simulink_ros/WEIGHT1','Value',num2str(weights(1)))
 set_param('simulink_ros/WEIGHT2','Value',num2str(weights(2)))
