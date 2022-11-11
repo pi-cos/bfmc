@@ -26,7 +26,7 @@ setup.vel2motor = 1/1.4;
 setup.rad2deg = rad2deg(1);
 setup.stop_time = inf; %[s]
 
-setup.sim_ts = 1e-2;
+setup.sim_ts = 2e-2;
 
 %% open simulink
 
@@ -44,9 +44,9 @@ open('nmpc_sim/cosim/simulink/simulink_ros.slx')
 FitnessFunction = @run_cosim;
 numberOfVariables = 5;
 lb = [1e-2;1e-2;1e-5;1e-5;1e-5];
-ub = [1e+3;1e+3;1e+1;1e+1;1e+1];
+ub = [1e+3;1e+3;1e+1;1e0;1e0];
 
-options = optimoptions(@gamultiobj,'PlotFcn',{@gaplotpareto},'MaxTime',48*60*60);
+options = optimoptions(@gamultiobj,'PlotFcn',{@gaplotpareto},'MaxTime',48*60*60,'Display','diagnose');
 
 %% run genetic algorithm
 

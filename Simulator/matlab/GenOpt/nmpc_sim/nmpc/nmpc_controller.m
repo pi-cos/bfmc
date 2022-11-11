@@ -111,7 +111,9 @@ state_cosim = [state_cosim,[XY;PSI;VX;DF]];
 search_indexes = (1:length(track.s)-(settings.N+1));
 squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 [~, curr_ref_index] = min(squared_dist);
-if last_ref_index - curr_ref_index > 0 && iter > 100
+last_ref_index = curr_ref_index;
+
+if track.s(curr_ref_index) > track.s(end-(settings.N+1)-0.5*config.ref_div/settings.Ts_st) && iter > 100
     disp(' ------------------------------ ')
     disp(' ****** TRACK COMPLETED! ****** ')
     reset = 1;
@@ -121,7 +123,6 @@ if last_ref_index - curr_ref_index > 0 && iter > 100
 else
     stop = 0;
 end
-last_ref_index = curr_ref_index;
 
 %% compute current errors wrt track centerline
 current_state.s = track.s(curr_ref_index);%time(end);
@@ -161,7 +162,7 @@ input.od(1,:) = track.k(ref_samples);
 
 if any(input.x(6,:) < 0.1)
     input.x(6,input.x(6,:)<0.25) = 0.25;
-    warning('Settings input.x to 0.1!')
+    warning('Settings input.x to 0.25!')
 end
 
 % call the NMPC solver 
@@ -247,7 +248,7 @@ iter = iter+1;
 
 %% output
 reset = 0;
-ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi;e_v;0];
+ctrls = [output.u(1,1);output.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi;e_v;0];
 
 %% clean me up function, called when stop
 

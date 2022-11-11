@@ -51,18 +51,32 @@ end
 
 %% input set
 
-X_real    = states(1);
-Y_real    = states(2);
-PSI_real  = states(3);
-VX        = states(4);
-DF        = states(5);
+newLoc    = states(1);
+X_real    = states(2);
+Y_real    = states(3);
+PSI_real  = states(4);
+VX        = states(5);
+DF        = states(6);
+
+w1 = states(7);
+w2 = states(8);
+w3 = states(9);
+w4 = states(10);
+w5 = states(11);
 
 %% init pos and rot 
+
+if newLoc < 0.5
+    reset = 0;
+    stop = 0;
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
+    return
+end
 
 if iter < 10
     reset = 1;
     stop = 0;
-    ctrls = [zeros(settings.nu,1);0;stop;reset];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
     iter = iter+1;
     return
 end
@@ -71,6 +85,13 @@ if iter == 10
     init_X = X_real;
     init_Y = Y_real;
     init_PSI = PSI_real;
+
+    Q=repmat([w1 w2 w3 w4 w5]',1,settings.N);
+    QN=Q(1:settings.nyN,1);
+
+    input.W=Q;           % (ny by N)
+    input.WN=QN;         % (nyN by 1)
+
 end
 
 if VX < 0.1
@@ -90,17 +111,18 @@ state_cosim = [state_cosim,[XY;PSI;VX;DF]];
 search_indexes = (1:length(track.s)-(settings.N+1));
 squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 [~, curr_ref_index] = min(squared_dist);
-if last_ref_index - curr_ref_index > 0
+last_ref_index = curr_ref_index;
+
+if track.s(curr_ref_index) > track.s(end-) && iter > 100
     disp(' ------------------------------ ')
     disp(' ****** TRACK COMPLETED! ****** ')
     reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;1];
     return
 else
     stop = 0;
 end
-last_ref_index = curr_ref_index;
 
 %% compute current errors wrt track centerline
 current_state.s = track.s(curr_ref_index);%time(end);
@@ -108,7 +130,10 @@ current_state.X = X;
 current_state.Y = Y;
 current_state.psi = PSI;
 [e_y, e_psi] = errors_calculator(current_state, curr_ref_index, track);
-computed_errors(mem.iter,:) = [e_y,e_psi];
+
+e_v = track.v(curr_ref_index)-VX;
+
+computed_errors(mem.iter,:) = [e_y, e_psi, e_v];
 
 %% update input for NMPC
 % update state
@@ -136,7 +161,7 @@ input.od(1,:) = track.k(ref_samples);
 %% NMPC
 
 if any(input.x(6,:) < 0.1)
-    input.x(6,input.x(6,:)<0.1) = 0.1;
+    input.x(6,input.x(6,:)<0.25) = 0.25;
     warning('Settings input.x to 0.1!')
 end
 
@@ -155,7 +180,7 @@ catch
     warning('failed NMPC.');
     reset = 1;
     stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset];
+    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
     return
 end
 
@@ -217,13 +242,13 @@ end
 % nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
 % if mod(mem.iter,10)==1
-    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
+    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, X =', num2str(X),'m, Y = ',num2str(Y),'m, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
 % end
 iter = iter+1;
 
 %% output
 reset = 0;
-ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset];
+ctrls = [output.u(1,1);output.u(2,1);track.k(ref_samples(1));stop;reset;e_y;e_psi;e_v;0];
 
 %% clean me up function, called when stop
 
@@ -231,7 +256,7 @@ ctrls = [output.u(1,1);input.u(2,1);track.k(ref_samples(1));stop;reset];
 
 %     function cleanMeUp()
         if config.debug 
-            computed_errors(mem.iter,:) = [e_y,e_psi];
+%             computed_errors(mem.iter,:) = [e_y,e_psi];
             assignin('base','stats',stats);
             assignin('base','controls_MPC',controls_MPC);
             assignin('base','state_sim',state_sim);
