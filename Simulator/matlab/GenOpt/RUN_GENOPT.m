@@ -16,6 +16,7 @@ unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; rosser
 
 addpath('/home/pico/Documents/GitHub/bfmc/Simulator/src/matlab_msg_gen_ros1/glnxa64/install/m')
 addpath(genpath('nmpc_sim'));
+addpath('utils')
 
 %% setup
 
@@ -46,10 +47,10 @@ numberOfVariables = 5;
 lb = [1e-2;1e-2;1e-5;1e-5;1e-5];
 ub = [1e+3;1e+3;1e+1;1e0;1e0];
 
-options = optimoptions(@gamultiobj,'PlotFcn',{@gaplotpareto},'MaxTime',48*60*60,'Display','diagnose');
+options = optimoptions(@gamultiobj,'PlotFcn',{@gaplotpareto},'Display','iter', 'OutputFcns', @gaoutfun); %'MaxTime',48*60*60,
 
 %% run genetic algorithm
 
-[x,fval] = gamultiobj(FitnessFunction,numberOfVariables,[],[],[],[],lb,ub,options);
+[x,fval,exitflag,output] = gamultiobj(FitnessFunction,numberOfVariables,[],[],[],[],lb,ub,options);
 
 save simulink_cosim_results
