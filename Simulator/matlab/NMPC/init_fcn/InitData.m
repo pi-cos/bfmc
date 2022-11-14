@@ -41,7 +41,7 @@ function [input] = InitData(settings)
 
         case 'KinematicVehicle'
             input.x0 = zeros(nx,1);
-            input.x0(6) = 0.1; %vx
+            input.x0(6) = 0.25; %vx
             input.u0 = zeros(nu,1);
             input.z0 = zeros(nz,1);
             para0 = [0; ...

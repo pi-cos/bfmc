@@ -94,9 +94,9 @@ if iter == 10
 
 end
 
-if VX < 0.1
-    VX = 0.1;
-    warning('Settings VX to 0.1!')
+if VX < 0.25
+    VX = 0.25;
+    warning('Settings VX to 0.25!')
 end
 
 PSI = PSI_real - init_PSI;
@@ -113,7 +113,7 @@ squared_dist = (track.X(search_indexes)-X).^2 + (track.Y(search_indexes)-Y).^2;
 [~, curr_ref_index] = min(squared_dist);
 last_ref_index = curr_ref_index;
 
-if track.s(curr_ref_index) > track.s(end-) && iter > 100
+if track.s(curr_ref_index) > track.s(end-(settings.N+1)-0.5*config.ref_div/settings.Ts_st) && iter > 100
     disp(' ------------------------------ ')
     disp(' ****** TRACK COMPLETED! ****** ')
     reset = 1;
@@ -160,9 +160,9 @@ input.od(1,:) = track.k(ref_samples);
 
 %% NMPC
 
-if any(input.x(6,:) < 0.1)
-    input.x(6,input.x(6,:)<0.25) = 0.25;
-    warning('Settings input.x to 0.1!')
+if any(input.x(6,:) < speed_min)
+    input.x(6,input.x(6,:)<speed_min) = speed_min;
+    warning(['Settings input.x to 0.25!')
 end
 
 % call the NMPC solver 

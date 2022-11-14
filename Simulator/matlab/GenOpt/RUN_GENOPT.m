@@ -20,14 +20,14 @@ addpath('utils')
 
 %% setup
 
-setup_solver
-
 
 setup.vel2motor = 1/1.4;
 setup.rad2deg = rad2deg(1);
 setup.stop_time = inf; %[s]
 
 setup.sim_ts = 2e-2;
+
+setup_solver
 
 %% open simulink
 

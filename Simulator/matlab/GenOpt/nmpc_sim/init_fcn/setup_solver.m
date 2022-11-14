@@ -64,6 +64,8 @@ opt.RTI             = 'yes'; % if use Real-time Iteration
 
 %% input
 
+settings.speed_min = 0.05;
+
 if opt.nonuniform_grid
     [input, data] = InitData_ngrid(settings);
     settings.N = settings.r;

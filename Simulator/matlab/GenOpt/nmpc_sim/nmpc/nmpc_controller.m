@@ -20,6 +20,7 @@ function [ctrls] = nmpc_controller(states)
 persistent iter last_ref_index 
 persistent track settings opt mem input config
 persistent init_X init_Y init_PSI
+persistent speed_min
 
 % debug variables
 persistent controls_MPC state_sim y_sim constraints stats computed_errors state_cosim
@@ -36,6 +37,7 @@ if isempty(iter)
     % updated at each iteration variables
     mem         = evalin('base','mem');
     input       = evalin('base','input');
+    speed_min   = settings.speed_min;
 end
 
 % debug variables
@@ -94,9 +96,9 @@ if iter == 10
 
 end
 
-if VX < 0.1
-    VX = 0.1;
-    warning('Settings VX to 0.1!')
+if VX < speed_min
+    VX = speed_min;
+    warning(['Settings VX to ',num2str(speed_min),'!'])
 end
 
 PSI = PSI_real - init_PSI;
@@ -160,9 +162,9 @@ input.od(1,:) = track.k(ref_samples);
 
 %% NMPC
 
-if any(input.x(6,:) < 0.1)
-    input.x(6,input.x(6,:)<0.25) = 0.25;
-    warning('Settings input.x to 0.25!')
+if any(input.x(6,:) < speed_min)
+    input.x(6,input.x(6,:)<speed_min) = speed_min;
+    warning(['Settings input.x to ',num2str(speed_min),'!'])
 end
 
 % call the NMPC solver 
