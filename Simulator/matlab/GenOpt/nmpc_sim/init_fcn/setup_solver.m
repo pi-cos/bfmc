@@ -32,8 +32,11 @@ else
     error('No setting data is detected!');
 end
 
+%
+settings.Ts_st = 0.01;
+
 % user defined
-settings.N = 80;
+settings.N = 100;
 settings.N2 = settings.N/5;
 settings.r = 10;
 
@@ -64,7 +67,7 @@ opt.RTI             = 'yes'; % if use Real-time Iteration
 
 %% input
 
-settings.speed_min = 0.05;
+settings.speed_min = 0.1;
 
 if opt.nonuniform_grid
     [input, data] = InitData_ngrid(settings);

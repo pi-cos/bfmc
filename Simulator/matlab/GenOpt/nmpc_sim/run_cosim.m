@@ -6,7 +6,7 @@ function y = run_cosim(weights)
 
 unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; rosservice call /gazebo/reset_simulation');
 clear nmpc_controller
-bdclose();
+% bdclose();
 clear nmpc_controller
 pause(1);
 open('nmpc_sim/cosim/simulink/simulink_ros.slx')

@@ -4,7 +4,7 @@ optchanged = false;
 switch flag
     case 'init'
         h1 = figure;
-%         ax = gca;
+        ax = gca;
 %         ax.XLim = [0 21];
 %         ax.YLim = [0 21];
         l1 = min(state.Population(:,1));

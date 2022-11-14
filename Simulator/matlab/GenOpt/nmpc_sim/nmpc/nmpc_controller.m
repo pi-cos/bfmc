@@ -244,7 +244,7 @@ end
 % nextTime = mem.iter*settings.Ts_st;
 mem.iter = mem.iter+1;
 % if mod(mem.iter,10)==1
-    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, X =', num2str(X),'m, Y = ',num2str(Y),'m, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
+    disp(['Iter ',num2str(mem.iter),', current space:' num2str(current_state.s) 'm, X = ', num2str(X),'m, Y = ',num2str(Y),'m, e_y = ' num2str(e_y), ', CPT:' num2str(cpt) 'ms Opt:' num2str(OptCrit) '   OBJ:' num2str(output.info.objValue) '  SQP_IT:' num2str(output.info.iteration_num)]);
 % end
 iter = iter+1;
 
