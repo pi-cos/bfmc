@@ -33,7 +33,7 @@ else
 end
 
 %
-settings.Ts_st = 0.01;
+settings.Ts_st = 0.02;
 
 % user defined
 settings.N = 100;

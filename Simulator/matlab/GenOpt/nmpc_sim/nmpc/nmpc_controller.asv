@@ -79,11 +79,10 @@ if iter < 10
     reset = 1;
     stop = 0;
     ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
-    if iter == 5
+%     if iter == 5
         disp('Resettings simulation.')
         unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; rosservice call /gazebo/reset_simulation');
-        pause(1);
-    end
+%     end
     iter = iter+1;
     return
 end

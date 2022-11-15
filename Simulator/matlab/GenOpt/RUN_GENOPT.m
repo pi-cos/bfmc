@@ -37,8 +37,10 @@ open('nmpc_sim/cosim/simulink/simulink_ros.slx')
 
 %% single run & return
 
-run_cosim([10 10 10 0.1 0.1]);
-return
+% load test_ga.mat
+% % run_cosim([10 10 10 0.1 0.1]);
+% run_cosim(gapopulationhistory(45,:));
+% return
 
 %% set genetic algorithm
 
