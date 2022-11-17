@@ -51,6 +51,7 @@ switch flag
         m2 = max(state.Population(:,2));
         r.Position = [l1 l2 m1-l1 m2-l2];
         pause(0.1)
+        save partial_ga_results feas_history pop_history rank_history score_history
         % Update the fraction of mutation and crossover after 25 generations.
         if state.Generation == 25
             options.CrossoverFraction = 0.8;
