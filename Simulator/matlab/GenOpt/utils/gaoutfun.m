@@ -53,10 +53,10 @@ switch flag
         pause(0.1)
         save partial_ga_results feas_history pop_history rank_history score_history
         % Update the fraction of mutation and crossover after 25 generations.
-        if state.Generation == 25
-            options.CrossoverFraction = 0.8;
-            optchanged = true;
-        end
+%         if state.Generation == 25
+%             options.CrossoverFraction = 0.8;
+%             optchanged = true;
+%         end
     case 'done'
         % Include the final population in the history.
         ss = size(pop_history,3);

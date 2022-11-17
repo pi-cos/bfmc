@@ -37,11 +37,11 @@ open('nmpc_sim/cosim/simulink/simulink_ros.slx')
 
 %% single run & return
 
-load partial_ga_results.mat
-% run_cosim([10 10 10 0.1 0.1]);
-% run_cosim(gapopulationhistory(45,:));
-cosim_res = run_cosim(pop_history(1,:,end));
-return
+% load partial_ga_results.mat
+% % run_cosim([10 10 10 0.1 0.1]);
+% % run_cosim(gapopulationhistory(45,:));
+% cosim_res = run_cosim(pop_history(1,:,end));
+% return
 
 %% set genetic algorithm
 
@@ -50,7 +50,7 @@ numberOfVariables = 5;
 lb = [1e-1;1e-1;1e-1;1e-5;1e-5];
 ub = [1e+3;1e+3;1e+1;1e0;1e0];
 
-options = optimoptions(@gamultiobj,'PlotFcn',{@gaplotpareto},'Display','iter', 'OutputFcns', @gaoutfun); %'MaxTime',48*60*60,
+options = optimoptions(@gamultiobj,'PlotFcn',{@gaplotpareto},'Display','iter', 'OutputFcns', @gaoutfun,'MaxGenerations',50); %'MaxTime',48*60*60,
 
 %% run genetic algorithm
 
