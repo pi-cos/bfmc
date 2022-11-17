@@ -38,8 +38,8 @@ open('nmpc_sim/cosim/simulink/simulink_ros.slx')
 %% single run & return
 
 % load partial_ga_results.mat
-% % run_cosim([10 10 10 0.1 0.1]);
-% % run_cosim(gapopulationhistory(45,:));
+% run_cosim([10 10 10 0.1 0.1]);
+% run_cosim(gapopulationhistory(45,:));
 % cosim_res = run_cosim(pop_history(1,:,end));
 % return
 
