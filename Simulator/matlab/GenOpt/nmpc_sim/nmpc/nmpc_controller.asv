@@ -79,10 +79,11 @@ if iter < 10
     reset = 1;
     stop = 0;
     ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
-%     if iter == 5
+    if iter == 5
         disp('Resettings simulation.')
         unix('source /home/pico/Documents/GitHub/bfmc/Simulator/devel/setup.bash; rosservice call /gazebo/reset_simulation');
-%     end
+        pause(1);
+    end
     iter = iter+1;
     return
 end
@@ -173,28 +174,64 @@ input.od(1,:) = track.k(ref_samples);
 
 %% NMPC
 
+if mem.iter < 10
+    mem.sqp_maxit = 10;
+    mem.kkt_lim   = 1e-3;
+    
+elseif mem.iter == 10 % 10th iteration settings update
+    
+    mem.sqp_maxit = 1;
+    mem.kkt_lim   = 1e-3;
+    
+end
+
+
 if any(input.x(6,:) < speed_min)
     input.x(6,input.x(6,:)<speed_min) = speed_min;
     warning(['Settings input.x to ',num2str(speed_min),'!'])
 end
 
 % call the NMPC solver 
-try
-    [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
-catch
-%     output = input;
-%     output.info.cpuTime = 0;
-%     output.info.shootTime = 0;
-%     output.info.condTime = 0;
-%     output.info.qpTime = 0;
-%     output.info.OptCrit = 0;
-%     output.info.objValue = 0;
-%     output.info.iteration_num = 0;
-    warning('failed NMPC.');
-    reset = 1;
-    stop = 1;
-    ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
-    return
+curr_solver_problems = 0;
+while 1
+    try
+        [output, mem] = mpc_nmpcsolver(input, settings, mem, opt);
+        if any(sum(isnan(output.x))) || any(sum(isnan(output.u)))
+            error('NaN in the NMPC solution.')
+        end
+        break
+
+    catch
+        %     output = input;
+        %     output.info.cpuTime = 0;
+        %     output.info.shootTime = 0;
+        %     output.info.condTime = 0;
+        %     output.info.qpTime = 0;
+        %     output.info.OptCrit = 0;
+        %     output.info.objValue = 0;
+        %     output.info.iteration_num = 0;
+        curr_solver_problems = curr_solver_problems+1;
+        if curr_solver_problems == 5
+
+            warning('failed NMPC.');
+            reset = 1;
+            stop = 1;
+            ctrls = [zeros(settings.nu,1);0;stop;reset;0;0;0;0];
+            return
+        else
+            input.u0 = zeros(settings.nu,1);
+            x = repmat(input.x0,1,settings.N+1);  % initialize all shooting points with the same initial state
+            u = repmat(input.u0,1,settings.N);    % initialize all controls with the same initial control
+            z = repmat(input.z0,1,settings.N);    % initialize all algebraic state with the same initial condition
+            input.x=x;           % states and controls of the first N stages (nx by N+1 matrix)
+            input.u=u;           % (nu by N vector)
+            input.z=z;           % (nz by N)
+            input.lambda    = zeros(settings.nx,settings.N+1);   % langrangian multiplier w.r.t. equality constraints
+            input.mu        = zeros(settings.N*settings.nc+settings.ncN,1);   % langrangian multipliers w.r.t. general inequality constraints
+            input.mu_u      = zeros(settings.N*settings.nu,1);   % langrangian multipliers w.r.t. input bounds
+            input.mu_x      = zeros(settings.N*settings.nbx,1);  % langrangian multipliers w.r.t. state bounds
+        end
+    end
 end
 
 % obtain the solution and update the data

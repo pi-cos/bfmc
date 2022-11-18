@@ -53,12 +53,12 @@ function [input] = InitData(settings)
             QN=Q(1:nyN,1);
 
             % upper and lower bounds for states (=nbx)
-            lb_x = [-0.5;-pi/2; 0;-deg2rad(45)];
-            ub_x = [+0.5;+pi/2;+2;+deg2rad(45)];
+            lb_x = [-1; -pi/2;  0; -deg2rad(40)];
+            ub_x = [+1; +pi/2; +2; +deg2rad(40)];
 
             % upper and lower bounds for controls (=nbu)
-            lb_u = [-20;-20]; %
-            ub_u = [+20;+20]; %
+            lb_u = [-10;-10]; %
+            ub_u = [+10;+10]; %
 
             % upper and lower bounds for general constraints (=nc)
             lb_g = [];

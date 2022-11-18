@@ -42,7 +42,7 @@ for ii = 1:10
     clear nmpc_controller
     WGN_LOC_PWR = 0;%1e-6*rand(1,1);
     DELAY_LOC = round(5*rand(1,1));
-    DELAY_VEL = round(3*rand(1,1));
+    DELAY_VEL = round(5*rand(1,1));
     DELAY_STEER = round(5*rand(1,1));
     assignin("base","WGN_LOC_PWR",WGN_LOC_PWR)
 %     set_param('simulink_ros/WGN_LOC_PWR','Value',num2str(WGN_LOC_PWR))
@@ -55,10 +55,8 @@ for ii = 1:10
     e_v_tot(ii) = mean(out.nmpc_output.signals.values(:,8));
 end
 
-if finished_nom && all(finished)
-    y = [mean(e_y_nom)+beta*mean(e_v_nom),var(e_y_tot)+beta*var(e_v_tot)]; %var(e_y)
-elseif finished_nom && ~all(finished)
-    y = [mean(e_y_nom)+beta*mean(e_v_nom),1e5]; %var(e_y)
+if finished_nom && ~all(finished)
+    y = [mean(e_y_nom)+beta*mean(e_v_nom),std(e_y_tot)+beta*std(e_v_tot)]; %var(e_y)
 else
     y = [1e5;1e5];
 end
