@@ -1,0 +1,4 @@
+Host bosch_car
+	Hostname 192.168.135.110
+	User pi
+	IdentityFile ~/.ssh/id_bosch_car_rsa

@@ -1,0 +1,12 @@
+<launch>
+    <machine name="bosch_car"
+        address="192.168.135.110"
+        user="pi"
+	    env-loader="/home/pi/remoteROSconnectionEnvironmentLoader.bash"
+	    default="never"/>
+        
+    <node machine="bosch_car" pkg="rosserial_python" type="serial_node.py" name="rosserial_bosch_car" output="log">
+        <param name="port" value="/dev/ttyACM0"/>
+        <param name="baud" value="1000000"/>
+    </node>
+</launch>
